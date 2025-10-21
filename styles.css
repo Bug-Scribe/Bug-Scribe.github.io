@@ -257,13 +257,15 @@ p {
 
 /* Team Section */
 .team-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 30px;
     margin-top: 60px;
 }
 
 .team-member {
+    width: 280px;
     background: rgba(26, 26, 26, 0.9);
     padding: 35px;
     border-radius: 16px;
@@ -303,6 +305,49 @@ p {
     font-weight: 400;
 }
 
+.member-links {
+    margin-top: 15px;
+}
+
+/* Common styles for both icons */
+.member-links a {
+    text-decoration: none;
+    font-size: 1.2rem; /* Icon size */
+    width: 40px; 
+    height: 40px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    margin: 0 8px; /* Adds 8px space to the left and right of each icon */
+}
+
+/* Common hover effect */
+.member-links a:hover {
+    transform: scale(1.1);
+}
+
+/* LinkedIn specific style */
+.member-links a[aria-label*="LinkedIn"] {
+    color: #405de6; /* Your site's accent blue */
+    background: rgba(64, 93, 230, 0.15); /* Light blue background */
+}
+.member-links a[aria-label*="LinkedIn"]:hover {
+    background: rgba(64, 93, 230, 0.3);
+    color: #5851db; 
+}
+
+/* GitHub specific style */
+.member-links a[aria-label*="GitHub"] {
+    color: #f5f5f5; /* Light gray/white icon */
+    background: rgba(245, 245, 245, 0.1); /* Subtle light background */
+}
+.member-links a[aria-label*="GitHub"]:hover {
+    background: rgba(245, 245, 245, 0.2);
+    color: #ffffff; /* Pure white on hover */
+}
+
 /* Supervisor Section */
 .supervisor-card {
     background: rgba(26, 26, 26, 0.9);
@@ -337,6 +382,48 @@ p {
     font-size: 1.2rem;
     color: #405de6;
     font-weight: 400;
+}
+
+.supervisor-links {
+    margin-top: 15px; /* Same spacing as team members */
+}
+
+/* Common styles for supervisor icons */
+.supervisor-links a {
+    text-decoration: none;
+    font-size: 1.2rem; /* Icon size */
+    width: 40px; 
+    height: 40px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    margin: 0 8px; /* Spacing between icons */
+}
+
+/* Common hover effect */
+.supervisor-links a:hover {
+    transform: scale(1.1);
+}
+
+/* LinkedIn specific style */
+.supervisor-links a[aria-label*="LinkedIn"] {
+    color: #405de6; /* Site's accent blue */
+    background: rgba(64, 93, 230, 0.15); /* Light blue background */
+}
+.supervisor-links a[aria-label*="LinkedIn"]:hover {
+    background: rgba(64, 93, 230, 0.3);
+    color: #5851db; 
+}
+
+.supervisor-links a[aria-label*="Website"] {
+    color: #f5f5f5; /* Light gray/white icon */
+    background: rgba(245, 245, 245, 0.1); /* Subtle light background */
+}
+.supervisor-links a[aria-label*="Website"]:hover {
+    background: rgba(245, 245, 245, 0.2);
+    color: #ffffff; /* Pure white on hover */
 }
 
 /* Project Info */
