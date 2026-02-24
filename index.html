@@ -75,25 +75,71 @@
 
                 <h3>Summary of Experiments</h3>
                 <div class="table-wrapper">
-                    <table class="results-table">
+                    <table class="results-table" role="grid">
+                        <caption class="sr-only">Validity classifier experiments: accuracy and metrics</caption>
                         <thead>
                             <tr>
-                                <th>Experiment</th>
-                                <th>Accuracy</th>
-                                <th>Correct/Total</th>
-                                <th>TP</th>
-                                <th>FN</th>
-                                <th>TN</th>
-                                <th>FP</th>
-                                <th>Calls/report</th>
+                                <th scope="col">Experiment</th>
+                                <th scope="col" class="num">Accuracy</th>
+                                <th scope="col" class="num">Correct/Total</th>
+                                <th scope="col" class="num">TP</th>
+                                <th scope="col" class="num">FN</th>
+                                <th scope="col" class="num">TN</th>
+                                <th scope="col" class="num">FP</th>
+                                <th scope="col" class="num">Calls per report</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr><td>Basic</td><td>64.0%</td><td>32/50</td><td>29</td><td>0</td><td>3</td><td>18</td><td>1</td></tr>
-                            <tr><td>Enhanced</td><td>78.0%</td><td>39/50</td><td>22</td><td>7</td><td>17</td><td>4</td><td>1</td></tr>
-                            <tr><td>Enhanced v2</td><td>82.0%</td><td>41/50</td><td>23</td><td>6</td><td>18</td><td>3</td><td>3 (majority vote)</td></tr>
-                            <tr><td>Full 50 (iteration 1)</td><td>82.0%</td><td>41/50</td><td>26</td><td>3</td><td>15</td><td>6</td><td>1</td></tr>
-                            <tr class="best-result"><td>Full 50 (iteration 2)</td><td><strong>90.0%</strong></td><td><strong>45/50</strong></td><td>29</td><td>0</td><td>16</td><td>5</td><td>1</td></tr>
+                            <tr>
+                                <td data-label="Experiment">Basic</td>
+                                <td data-label="Accuracy" class="num">64.0%</td>
+                                <td data-label="Correct/Total" class="num">32/50</td>
+                                <td data-label="TP" class="num">29</td>
+                                <td data-label="FN" class="num">0</td>
+                                <td data-label="TN" class="num">3</td>
+                                <td data-label="FP" class="num">18</td>
+                                <td data-label="Calls per report" class="num">1</td>
+                            </tr>
+                            <tr>
+                                <td data-label="Experiment">Enhanced</td>
+                                <td data-label="Accuracy" class="num">78.0%</td>
+                                <td data-label="Correct/Total" class="num">39/50</td>
+                                <td data-label="TP" class="num">22</td>
+                                <td data-label="FN" class="num">7</td>
+                                <td data-label="TN" class="num">17</td>
+                                <td data-label="FP" class="num">4</td>
+                                <td data-label="Calls per report" class="num">1</td>
+                            </tr>
+                            <tr>
+                                <td data-label="Experiment">Enhanced v2</td>
+                                <td data-label="Accuracy" class="num">82.0%</td>
+                                <td data-label="Correct/Total" class="num">41/50</td>
+                                <td data-label="TP" class="num">23</td>
+                                <td data-label="FN" class="num">6</td>
+                                <td data-label="TN" class="num">18</td>
+                                <td data-label="FP" class="num">3</td>
+                                <td data-label="Calls per report" class="num">3 (majority vote)</td>
+                            </tr>
+                            <tr>
+                                <td data-label="Experiment">Full 50 (iteration 1)</td>
+                                <td data-label="Accuracy" class="num">82.0%</td>
+                                <td data-label="Correct/Total" class="num">41/50</td>
+                                <td data-label="TP" class="num">26</td>
+                                <td data-label="FN" class="num">3</td>
+                                <td data-label="TN" class="num">15</td>
+                                <td data-label="FP" class="num">6</td>
+                                <td data-label="Calls per report" class="num">1</td>
+                            </tr>
+                            <tr class="best-result">
+                                <td data-label="Experiment">Full 50 (iteration 2)</td>
+                                <td data-label="Accuracy" class="num"><strong>90.0%</strong></td>
+                                <td data-label="Correct/Total" class="num"><strong>45/50</strong></td>
+                                <td data-label="TP" class="num">29</td>
+                                <td data-label="FN" class="num">0</td>
+                                <td data-label="TN" class="num">16</td>
+                                <td data-label="FP" class="num">5</td>
+                                <td data-label="Calls per report" class="num">1</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
