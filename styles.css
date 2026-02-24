@@ -122,6 +122,7 @@ nav ul li a {
     padding: 12px 20px;
     border-radius: 8px;
     position: relative;
+    white-space: nowrap;
 }
 
 nav ul li a::before {
@@ -161,6 +162,7 @@ h2 {
     margin-bottom: 40px;
     text-align: center;
     position: relative;
+    line-height: 1.25;
 }
 
 h2::after {
@@ -253,6 +255,103 @@ p {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+/* Speed Up Bug Reporting Section */
+#speed-up h2 {
+    white-space: nowrap;
+    max-width: 100%;
+    margin-left: 2px;
+    margin-right: 2px;
+    padding-left: 2px;
+    padding-right: 2px;
+    box-sizing: content-box;
+}
+
+.speed-intro {
+    max-width: 720px;
+    margin: 0 auto 48px;
+    text-align: center;
+    font-size: 1.2rem;
+    color: #b3b3b3;
+}
+
+.metrics-strip {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 56px;
+}
+
+.metric {
+    background: rgba(26, 26, 26, 0.9);
+    padding: 24px 32px;
+    border-radius: 12px;
+    border: 1px solid #3c3c3c;
+    text-align: center;
+    min-width: 140px;
+}
+
+.metric-value {
+    display: block;
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #405de6;
+    margin-bottom: 6px;
+}
+
+.metric-label {
+    font-size: 0.95rem;
+    color: #b3b3b3;
+}
+
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+}
+
+.benefit-card {
+    background: rgba(26, 26, 26, 0.9);
+    padding: 28px;
+    border-radius: 16px;
+    border: 1px solid #3c3c3c;
+}
+
+.benefit-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+    color: #f5f5f5;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.benefit-card h3 i {
+    color: #405de6;
+}
+
+.benefit-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.benefit-card li {
+    padding: 8px 0;
+    color: #b3b3b3;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-bottom: none;
+}
+
+.benefit-card li:before {
+    content: none;
+}
+
+.benefit-card li strong {
+    color: #e5e5e5;
 }
 
 /* Team Section */
