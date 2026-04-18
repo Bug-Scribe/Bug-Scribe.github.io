@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BugScribe Benchmark</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #0b1722;
+      --crimson: #c4132f;
+      --crimson-hover: #a81028;
+      --crimson-light: #fdf0f2;
+      --sand: #f7f2ea;
+      --mist: #e7edf3;
+      --text-strong: #0f1b28;
+      --text-muted: #4a5b6b;
+      --white: #ffffff;
+      --border: rgba(11,23,34,0.09);
+      --border-med: rgba(11,23,34,0.15);
+      --shadow-sm: 0 1px 3px rgba(11,23,34,0.07);
+      --shadow-lg: 0 12px 48px rgba(11,23,34,0.18);
+      --radius: 8px;
+      --radius-lg: 12px;
+      --green: #176b3f;
+      --green-light: #e8f5ee;
+      --blue: #1a4880;
+      --blue-light: #e8eef8;
+      --gray: #6b7a8b;
+      --gray-light: #f0f2f5;
+
+      /* Group colors */
+      --g-core:   #f0f3f7;
+      --g-gen:    #eaeff8;
+      --g-edit:   #ede8f7;
+      --g-valid:  #e8f5ee;
+      --g-dup:    #fdf3e8;
+      --g-repro:  #e8f5f3;
+
+      /* Group accent borders */
+      --a-core:  #8fa3b8;
+      --a-gen:   #4a72c4;
+      --a-edit:  #7c4ac4;
+      --a-valid: #2a8a5a;
+      --a-dup:   #c47c2a;
+      --a-repro: #2a8a7a;
+    }
+
+    body {
+      font-family: 'Manrope', system-ui, sans-serif;
+      background: var(--sand);
+      color: var(--text-strong);
+      min-height: 100vh;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    /* ── Header ─────────────────────────────────────── */
+    .header {
+      background: var(--ink);
+      padding: 0 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 58px;
+      position: sticky;
+      top: 0;
+      z-index: 60;
+    }
+
+    .header-brand { display: flex; align-items: center; gap: 11px; }
+
+    .logo {
+      width: 29px; height: 29px;
+      background: var(--crimson);
+      border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .logo svg { width: 15px; height: 15px; fill: white; }
+
+    .header-name { color: white; font-size: 15px; font-weight: 700; }
+    .header-sub  { color: rgba(255,255,255,0.38); font-size: 11px; }
+
+    .header-pill {
+      background: rgba(196,19,47,0.18);
+      color: #f07888;
+      border: 1px solid rgba(196,19,47,0.3);
+      border-radius: 100px;
+      padding: 3px 12px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* ── Tabs ───────────────────────────────────────── */
+    .tabs-bar {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 0 28px;
+      display: flex;
+    }
+
+    .tab-btn {
+      padding: 12px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      font-family: inherit;
+      margin-bottom: -1px;
+      transition: color 0.15s, border-color 0.15s;
+    }
+
+    .tab-btn:hover  { color: var(--text-strong); }
+    .tab-btn.active { color: var(--crimson); border-bottom-color: var(--crimson); }
+
+    /* ── Page shell ─────────────────────────────────── */
+    .page { padding: 24px 28px; }
+
+    /* ── Stats ──────────────────────────────────────── */
+    .stats-row { display: flex; gap: 9px; margin-bottom: 18px; flex-wrap: wrap; }
+
+    .stat-chip {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 4px 13px;
+      font-size: 11px; font-weight: 500;
+      color: var(--text-muted);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .stat-chip strong { color: var(--text-strong); font-weight: 700; }
+
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border-med); }
+    .dot.green   { background: var(--green); }
+    .dot.blue    { background: var(--blue); }
+    .dot.orange  { background: var(--a-dup); }
+    .dot.crimson { background: var(--crimson); }
+
+    /* ── Toolbar ────────────────────────────────────── */
+    .toolbar { display: flex; align-items: center; gap: 9px; margin-bottom: 16px; }
+
+    .search-wrap { position: relative; flex: 1; max-width: 340px; }
+
+    .search-icon {
+      position: absolute; left: 10px; top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted); pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 8px 11px 8px 34px;
+      border: 1px solid var(--border-med);
+      border-radius: var(--radius);
+      font-size: 13px; font-family: inherit;
+      background: var(--white);
+      color: var(--text-strong);
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .search-input:focus {
+      border-color: var(--crimson);
+      box-shadow: 0 0 0 3px rgba(196,19,47,0.09);
+    }
+
+    .search-input::placeholder { color: var(--text-muted); }
+
+    /* ── Spreadsheet table ──────────────────────────── */
+    .table-wrap {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: auto;
+      box-shadow: var(--shadow-sm);
+      max-height: calc(100vh - 220px);
+    }
+
+    table {
+      border-collapse: collapse;
+      width: max-content;
+      min-width: 100%;
+    }
+
+    /* Group header row */
+    thead tr.group-row th {
+      padding: 7px 10px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      white-space: nowrap;
+    }
+
+    thead tr.group-row th.g-core  { background: var(--g-core);  border-top: 3px solid var(--a-core);  color: var(--a-core); }
+    thead tr.group-row th.g-gen   { background: var(--g-gen);   border-top: 3px solid var(--a-gen);   color: var(--a-gen); }
+    thead tr.group-row th.g-edit  { background: var(--g-edit);  border-top: 3px solid var(--a-edit);  color: var(--a-edit); }
+    thead tr.group-row th.g-valid { background: var(--g-valid); border-top: 3px solid var(--a-valid); color: var(--a-valid); }
+    thead tr.group-row th.g-dup   { background: var(--g-dup);   border-top: 3px solid var(--a-dup);   color: var(--a-dup); }
+    thead tr.group-row th.g-repro { background: var(--g-repro); border-top: 3px solid var(--a-repro); color: var(--a-repro); }
+
+    /* Column label row */
+    thead tr.col-row th {
+      padding: 7px 10px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      background: #f6f7f9;
+      border-bottom: 2px solid var(--border-med);
+      white-space: nowrap;
+      position: sticky;
+      top: 33px;
+      z-index: 20;
+    }
+
+    thead tr.col-row th.g-core  { background: #eef1f5; }
+    thead tr.col-row th.g-gen   { background: #e3eaf6; }
+    thead tr.col-row th.g-edit  { background: #e7e2f5; }
+    thead tr.col-row th.g-valid { background: #e2f2e9; }
+    thead tr.col-row th.g-dup   { background: #faeee2; }
+    thead tr.col-row th.g-repro { background: #e2f2ef; }
+
+    /* Sticky first column */
+    thead tr.group-row th:first-child,
+    thead tr.col-row th:first-child,
+    tbody td:first-child {
+      position: sticky;
+      left: 0;
+      z-index: 15;
+    }
+
+    thead tr.group-row th:first-child { z-index: 25; }
+    thead tr.col-row   th:first-child { z-index: 25; }
+    tbody td:first-child { background: var(--white); z-index: 10; }
+
+    /* Col separator between groups */
+    thead tr.group-row th + th { border-left: 1px solid rgba(0,0,0,0.08); }
+    thead tr.col-row   th.group-start { border-left: 1px solid rgba(0,0,0,0.08); }
+    tbody td.group-start { border-left: 1px solid rgba(0,0,0,0.06); }
+
+    /* Data rows */
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.08s;
+    }
+
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #fafaf8; }
+    tbody tr:hover td:first-child { background: #fafaf8; }
+
+    tbody td {
+      padding: 0;
+      vertical-align: top;
+    }
+
+    /* Cell inner — content sits here */
+    .cell {
+      padding: 8px 10px;
+      min-height: 56px;
+      max-width: 200px;
+      min-width: 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .cell.cell-id    { min-width: 80px; max-width: 80px; }
+    .cell.cell-repo  { min-width: 140px; max-width: 140px; }
+    .cell.cell-badge { min-width: 90px; max-width: 90px; align-items: flex-start; justify-content: center; min-height: 56px; }
+    .cell.cell-dup   { min-width: 160px; max-width: 160px; }
+
+    .cell-id-text {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .cell-repo-text {
+      font-size: 11px;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    /* Text cell: truncated to 3 lines, clickable */
+    .cell-text {
+      font-size: 12px;
+      color: var(--text-strong);
+      line-height: 1.55;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      cursor: pointer;
+      word-break: break-word;
+    }
+
+    .cell-text:hover { color: var(--crimson); }
+    .cell-text.empty { color: var(--text-muted); font-style: italic; font-size: 11px; cursor: default; }
+    .cell-text.empty:hover { color: var(--text-muted); }
+
+    .cell-more {
+      font-size: 10px;
+      color: var(--crimson);
+      font-weight: 600;
+      margin-top: 3px;
+      cursor: pointer;
+      align-self: flex-start;
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-flex; align-items: center; gap: 3px;
+      padding: 2px 9px;
+      border-radius: 100px;
+      font-size: 11px; font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .badge-valid   { background: var(--green-light); color: var(--green); }
+    .badge-invalid { background: var(--crimson-light); color: var(--crimson); }
+    .badge-yes     { background: var(--blue-light); color: var(--blue); }
+    .badge-no      { background: var(--gray-light); color: var(--gray); }
+    .badge-na      { background: var(--gray-light); color: var(--gray); }
+
+    .dup-link {
+      display: inline-block;
+      background: #fdf3e8;
+      color: var(--a-dup);
+      border-radius: 5px;
+      padding: 2px 7px;
+      font-size: 11px; font-weight: 700;
+      margin: 1px 2px 1px 0;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+
+    .dup-link:hover { background: #f8e4c8; text-decoration: underline; }
+
+    /* ── Generation report popup ────────────────────── */
+    .gen-overlay {
+      position: fixed; inset: 0;
+      z-index: 500;
+      display: flex; align-items: center; justify-content: center;
+      padding: 28px;
+      background: rgba(11,23,34,0.45);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s;
+    }
+
+    .gen-overlay.visible { opacity: 1; pointer-events: all; }
+
+    .gen-popup {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      width: 100%; max-width: 1080px;
+      height: 56vh;
+      display: flex; flex-direction: column;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      transform: translateY(10px);
+      transition: transform 0.22s;
+    }
+
+    .gen-overlay.visible .gen-popup { transform: translateY(0); }
+
+    /* Header bar */
+    .gen-header {
+      background: var(--ink);
+      padding: 14px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .gen-header-left { display: flex; flex-direction: column; gap: 2px; }
+
+    .gen-eyebrow {
+      font-size: 9px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.45);
+    }
+
+    .gen-bugid { font-size: 15px; font-weight: 700; color: white; }
+
+    .btn-icon-inv {
+      width: 28px; height: 28px;
+      border: none; background: rgba(255,255,255,0.12);
+      border-radius: var(--radius);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,0.7);
+      transition: background 0.15s;
+    }
+
+    .btn-icon-inv:hover { background: rgba(255,255,255,0.22); color: white; }
+
+    /* Title strip */
+    .gen-title-strip {
+      background: var(--g-gen);
+      border-bottom: 2px solid var(--a-gen);
+      padding: 14px 22px;
+      flex-shrink: 0;
+    }
+
+    .gen-strip-label {
+      font-size: 9px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.09em;
+      color: var(--a-gen); margin-bottom: 5px;
+    }
+
+    .gen-title-text {
+      font-size: 18px; font-weight: 700;
+      color: var(--text-strong); line-height: 1.3;
+    }
+
+    .gen-title-text.empty { color: var(--text-muted); font-style: italic; font-size: 14px; }
+
+    /* Three-column body */
+    .gen-body {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      overflow: hidden;
+    }
+
+    .gen-col {
+      display: flex; flex-direction: column;
+      border-right: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .gen-col:last-child { border-right: none; }
+
+    .gen-col-head {
+      padding: 10px 18px 9px;
+      border-bottom: 1px solid var(--border);
+      background: #f4f6fb;
+      flex-shrink: 0;
+    }
+
+    .gen-col-label {
+      font-size: 9px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.09em;
+      color: var(--a-gen);
+    }
+
+    .gen-col-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 14px 18px;
+    }
+
+    .gen-col-val {
+      font-size: 12.5px; color: var(--text-strong);
+      line-height: 1.75; white-space: pre-wrap; word-break: break-word;
+    }
+
+    .gen-col-val.empty { color: var(--text-muted); font-style: italic; }
+
+    /* Footer row */
+    .gen-footer {
+      display: flex;
+      border-top: 2px solid var(--border);
+      background: #f9f8f6;
+      flex-shrink: 0;
+    }
+
+    .gen-footer-cell {
+      flex: 1;
+      padding: 12px 18px;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .gen-footer-cell:last-child { border-right: none; }
+    .gen-footer-cell.wide { flex: 2; }
+
+    .gen-footer-label {
+      font-size: 9px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.09em;
+      color: var(--text-muted);
+    }
+
+    .gen-footer-val {
+      font-size: 12px; color: var(--text-strong);
+      line-height: 1.55; white-space: pre-wrap; word-break: break-word;
+    }
+
+    .gen-footer-val.empty { color: var(--text-muted); font-style: italic; }
+
+    /* ── Editing diff popup ──────────────────────────── */
+    .edit-overlay {
+      position: fixed; inset: 0;
+      z-index: 500;
+      display: flex; align-items: center; justify-content: center;
+      padding: 28px;
+      background: rgba(11,23,34,0.45);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s;
+    }
+
+    .edit-overlay.visible { opacity: 1; pointer-events: all; }
+
+    .edit-popup {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      width: 100%; max-width: 1080px;
+      height: 62vh;
+      display: flex; flex-direction: column;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      transform: translateY(10px);
+      transition: transform 0.22s;
+    }
+
+    .edit-overlay.visible .edit-popup { transform: translateY(0); }
+
+    .edit-header {
+      background: var(--ink);
+      padding: 14px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .edit-eyebrow { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.45); }
+    .edit-bugid   { font-size: 15px; font-weight: 700; color: white; }
+
+    /* Edit request banner */
+    .edit-request-banner {
+      background: #fdf8ec;
+      border-bottom: 2px solid #c4a030;
+      padding: 12px 22px;
+      flex-shrink: 0;
+    }
+
+    .edit-request-label {
+      font-size: 9px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.09em;
+      color: #8b6800; margin-bottom: 5px;
+    }
+
+    .edit-request-text {
+      font-size: 13px; color: #3d2e00;
+      line-height: 1.55; font-style: italic;
+    }
+
+    .edit-request-text.empty { color: var(--text-muted); }
+
+    /* Split diff panels */
+    .edit-body {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      overflow: hidden;
+    }
+
+    .diff-panel {
+      display: flex; flex-direction: column;
+      border-right: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .diff-panel:last-child { border-right: none; }
+
+    .diff-panel-head {
+      padding: 9px 18px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    .diff-panel-head.left  { background: #fdf4f4; }
+    .diff-panel-head.right { background: #f4fdf4; }
+
+    .diff-panel-label {
+      font-size: 9px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.09em;
+      color: var(--text-muted);
+    }
+
+    .diff-panel-body {
+      flex: 1; overflow-y: auto;
+      padding: 14px 18px;
+    }
+
+    /* Original report fields (left panel) */
+    .orig-field { margin-bottom: 14px; }
+    .orig-field:last-child { margin-bottom: 0; }
+
+    .orig-field-label {
+      font-size: 9px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--a-gen); margin-bottom: 4px;
+    }
+
+    .orig-field-val {
+      font-size: 12px; color: var(--text-strong);
+      line-height: 1.65; white-space: pre-wrap; word-break: break-word;
+    }
+
+    .orig-field-val.empty { color: var(--text-muted); font-style: italic; }
+
+    /* Updated text (right panel) */
+    .updated-text {
+      font-size: 12.5px; color: var(--text-strong);
+      line-height: 1.75; white-space: pre-wrap; word-break: break-word;
+    }
+
+    .updated-text.empty { color: var(--text-muted); font-style: italic; }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center; padding: 60px 24px; color: var(--text-muted);
+    }
+
+    .empty-state svg { opacity: 0.2; margin-bottom: 12px; }
+    .empty-state p { font-size: 13px; }
+
+    /* ── Cell popup ─────────────────────────────────── */
+    .popup-overlay {
+      position: fixed; inset: 0;
+      z-index: 400;
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+      background: rgba(11,23,34,0.3);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.18s;
+    }
+
+    .popup-overlay.visible { opacity: 1; pointer-events: all; }
+
+    .popup {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      width: 100%; max-width: 560px;
+      max-height: 70vh;
+      display: flex; flex-direction: column;
+      box-shadow: var(--shadow-lg);
+      transform: translateY(10px);
+      transition: transform 0.2s;
+    }
+
+    .popup-overlay.visible .popup { transform: translateY(0); }
+
+    .popup-head {
+      padding: 14px 18px 12px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .popup-meta { display: flex; flex-direction: column; gap: 2px; }
+    .popup-col  { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-muted); }
+    .popup-id   { font-size: 13px; font-weight: 700; color: var(--text-strong); }
+
+    .btn-icon {
+      width: 28px; height: 28px;
+      border: none; background: var(--mist);
+      border-radius: var(--radius);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted); flex-shrink: 0;
+      transition: background 0.15s;
+    }
+
+    .btn-icon:hover { background: #d4dde6; color: var(--text-strong); }
+
+    .popup-body {
+      flex: 1; overflow-y: auto;
+      padding: 16px 18px;
+    }
+
+    .popup-text {
+      font-size: 13px; color: var(--text-strong);
+      line-height: 1.7; white-space: pre-wrap; word-break: break-word;
+    }
+
+    /* ── Results tab ────────────────────────────────── */
+    .results-header { margin-bottom: 24px; }
+    .results-header h3 { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+    .results-header p  { color: var(--text-muted); font-size: 13px; }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 14px;
+    }
+
+    .metric-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .metric-label {
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.07em;
+      color: var(--text-muted); margin-bottom: 10px;
+    }
+
+    .metric-score {
+      font-size: 28px; font-weight: 800;
+      color: #d0d5db; line-height: 1;
+    }
+
+    .metric-method { font-size: 11px; color: var(--text-muted); margin-top: 8px; }
+
+    .hidden { display: none !important; }
+
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border-med); border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-brand">
+    <div class="logo">
+      <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm-1 14.5v-4.5H7l5-8.5v4.5h4z"/></svg>
+    </div>
+    <div>
+      <div class="header-name">BugScribe</div>
+      <div class="header-sub">Benchmark Dataset</div>
+    </div>
+  </div>
+  <div class="header-pill">v0.1 · Alpha</div>
+</header>
+
+<!-- Tabs -->
+<nav class="tabs-bar">
+  <button class="tab-btn active" data-tab="dataset">Dataset</button>
+  <button class="tab-btn" data-tab="results">Results</button>
+</nav>
+
+<!-- Dataset tab -->
+<div id="tab-dataset" class="page">
+  <div class="stats-row" id="stats-row"></div>
+
+  <div class="toolbar">
+    <div class="search-wrap">
+      <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+      <input class="search-input" id="search-input" type="text" placeholder="Search by ID, title, description…">
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table id="main-table">
+      <thead>
+        <tr class="group-row">
+          <th class="g-core" colspan="3">Core</th>
+          <th class="g-gen"  colspan="4">Generation</th>
+          <th class="g-edit" colspan="2">Editing</th>
+          <th class="g-valid" colspan="2">Validity</th>
+          <th class="g-dup"   colspan="1">Duplicates</th>
+          <th class="g-repro" colspan="1">Reproducibility</th>
+        </tr>
+        <tr class="col-row">
+          <th class="g-core">ID</th>
+          <th class="g-core">Repo</th>
+          <th class="g-core">Description</th>
+          <th class="g-gen  group-start">Title</th>
+          <th class="g-gen">EB</th>
+          <th class="g-gen">OB</th>
+          <th class="g-gen">S2R</th>
+          <th class="g-edit group-start">Edit Request</th>
+          <th class="g-edit">Updated Report</th>
+          <th class="g-valid group-start">Valid</th>
+          <th class="g-valid">Fix Suggestion</th>
+          <th class="g-dup  group-start">Dup Refs</th>
+          <th class="g-repro group-start">Reproducible</th>
+        </tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Results tab -->
+<div id="tab-results" class="page hidden">
+  <div class="results-header">
+    <h3>Benchmark Results</h3>
+    <p>Run the BugScribe pipeline against the dataset to populate scores.</p>
+  </div>
+  <div class="metrics-grid" id="metrics-grid"></div>
+</div>
+
+<!-- Editing diff popup -->
+<div class="edit-overlay" id="edit-overlay">
+  <div class="edit-popup">
+    <div class="edit-header">
+      <div>
+        <div class="edit-eyebrow">Editing Diff</div>
+        <div class="edit-bugid" id="edit-bugid"></div>
+      </div>
+      <button class="btn-icon-inv" id="btn-close-edit" title="Close">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="edit-request-banner">
+      <div class="edit-request-label">Edit Request</div>
+      <div class="edit-request-text" id="edit-request-text"></div>
+    </div>
+    <div class="edit-body">
+      <div class="diff-panel">
+        <div class="diff-panel-head left">
+          <span class="diff-panel-label">Original Report</span>
+        </div>
+        <div class="diff-panel-body" id="diff-left"></div>
+      </div>
+      <div class="diff-panel">
+        <div class="diff-panel-head right">
+          <span class="diff-panel-label">Updated</span>
+        </div>
+        <div class="diff-panel-body" id="diff-right"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Generation report popup -->
+<div class="gen-overlay" id="gen-overlay">
+  <div class="gen-popup">
+    <div class="gen-header">
+      <div class="gen-header-left">
+        <span class="gen-eyebrow">Generation Report</span>
+        <span class="gen-bugid" id="gen-bugid"></span>
+      </div>
+      <button class="btn-icon-inv" id="btn-close-gen" title="Close">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="gen-title-strip">
+      <div class="gen-strip-label">Title</div>
+      <div class="gen-title-text" id="gen-title"></div>
+    </div>
+    <div class="gen-body">
+      <div class="gen-col">
+        <div class="gen-col-head"><div class="gen-col-label">Steps to Reproduce</div></div>
+        <div class="gen-col-body"><div class="gen-col-val" id="gen-s2r"></div></div>
+      </div>
+      <div class="gen-col">
+        <div class="gen-col-head"><div class="gen-col-label">Expected Behavior</div></div>
+        <div class="gen-col-body"><div class="gen-col-val" id="gen-eb"></div></div>
+      </div>
+      <div class="gen-col">
+        <div class="gen-col-head"><div class="gen-col-label">Observed Behavior</div></div>
+        <div class="gen-col-body"><div class="gen-col-val" id="gen-ob"></div></div>
+      </div>
+    </div>
+    <div class="gen-footer">
+      <div class="gen-footer-cell">
+        <div class="gen-footer-label">Validity</div>
+        <div id="gen-valid"></div>
+      </div>
+      <div class="gen-footer-cell">
+        <div class="gen-footer-label">Reproducible</div>
+        <div id="gen-repro"></div>
+      </div>
+      <div class="gen-footer-cell">
+        <div class="gen-footer-label">Duplicate Refs</div>
+        <div class="gen-footer-val" id="gen-dups"></div>
+      </div>
+      <div class="gen-footer-cell wide" id="gen-fix-cell">
+        <div class="gen-footer-label">No-Code Fix Suggestion</div>
+        <div class="gen-footer-val" id="gen-fix"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Cell content popup -->
+<div class="popup-overlay" id="popup-overlay">
+  <div class="popup">
+    <div class="popup-head">
+      <div class="popup-meta">
+        <span class="popup-col" id="popup-col"></span>
+        <span class="popup-id"  id="popup-id"></span>
+      </div>
+      <button class="btn-icon" id="btn-close-popup" title="Close">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="popup-body">
+      <div class="popup-text" id="popup-text"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let bugs = [];
+
+  async function init() {
+    try {
+      const res = await fetch('./benchmark-data.json');
+      if (!res.ok) throw new Error();
+      bugs = (await res.json()).bugs || [];
+    } catch { bugs = []; }
+    renderStats();
+    renderTable();
+    renderMetrics();
+  }
+
+  // ── Stats ──────────────────────────────────────────────
+  function renderStats() {
+    const total = bugs.length;
+    const valid   = bugs.filter(b => b.is_valid_bug === true).length;
+    const invalid = bugs.filter(b => b.is_valid_bug === false).length;
+    const repro   = bugs.filter(b => b.is_reproducible === true).length;
+    const dups    = bugs.filter(b => b.duplicate_refs?.length > 0).length;
+    document.getElementById('stats-row').innerHTML = `
+      <div class="stat-chip"><span class="dot"></span><strong>${total}</strong> Entries</div>
+      <div class="stat-chip"><span class="dot green"></span><strong>${valid}</strong> Valid</div>
+      <div class="stat-chip"><span class="dot crimson"></span><strong>${invalid}</strong> Invalid</div>
+      <div class="stat-chip"><span class="dot blue"></span><strong>${repro}</strong> Reproducible</div>
+      <div class="stat-chip"><span class="dot orange"></span><strong>${dups}</strong> With duplicates</div>
+    `;
+  }
+
+  // ── Table ──────────────────────────────────────────────
+  function renderTable() {
+    const q = document.getElementById('search-input').value.toLowerCase().trim();
+    const rows = q
+      ? bugs.filter(b =>
+          b.bug_id.toLowerCase().includes(q) ||
+          (b.title || '').toLowerCase().includes(q) ||
+          (b.description || '').toLowerCase().includes(q) ||
+          b.source_repo.toLowerCase().includes(q))
+      : bugs;
+
+    const tbody = document.getElementById('table-body');
+
+    if (!rows.length) {
+      tbody.innerHTML = `<tr><td colspan="13">
+        <div class="empty-state">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+          <p>No entries found.</p>
+        </div>
+      </td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = rows.map(b => `
+      <tr>
+        <td>
+          <div class="cell cell-id">
+            <span class="cell-id-text">${esc(b.bug_id)}</span>
+          </div>
+        </td>
+        <td>
+          <div class="cell cell-repo">
+            <span class="cell-repo-text">${esc(b.source_repo)}</span>
+          </div>
+        </td>
+        <td>
+          ${textCell(b, 'description', 'Description')}
+        </td>
+        <td class="group-start">
+          ${textCell(b, 'title', 'Title', true)}
+        </td>
+        <td>
+          ${textCell(b, 'expected_behavior', 'Expected Behavior', true)}
+        </td>
+        <td>
+          ${textCell(b, 'observed_behavior', 'Observed Behavior', true)}
+        </td>
+        <td>
+          ${textCell(b, 's2r', 'Steps to Reproduce', true)}
+        </td>
+        <td class="group-start">
+          ${textCell(b, 'edit_request', 'Edit Request', false, true)}
+        </td>
+        <td>
+          ${textCell(b, 'edited_report', 'Updated Report', false, true)}
+        </td>
+        <td class="group-start">
+          <div class="cell cell-badge">
+            ${badgeValid(b.is_valid_bug)}
+          </div>
+        </td>
+        <td>
+          ${textCell(b, 'fix_suggestion', 'Fix Suggestion')}
+        </td>
+        <td class="group-start">
+          <div class="cell cell-dup">
+            ${dupCell(b.duplicate_refs)}
+          </div>
+        </td>
+        <td class="group-start">
+          <div class="cell cell-badge">
+            ${badgeRepro(b.is_reproducible, b.is_valid_bug)}
+          </div>
+        </td>
+      </tr>
+    `).join('');
+
+    // Click handlers for text cells
+    tbody.querySelectorAll('[data-popup]').forEach(el => {
+      el.addEventListener('click', () => {
+        if (el.dataset.gen)  showGenPopup(el.dataset.bugId);
+        else if (el.dataset.edit) showEditPopup(el.dataset.bugId);
+        else showPopup(el.dataset.bugId, el.dataset.col, el.dataset.val);
+      });
+    });
+  }
+
+  function textCell(bug, field, label, isGen = false, isEdit = false) {
+    const val = bug[field];
+    if (!val) {
+      return `<div class="cell"><span class="cell-text empty">—</span></div>`;
+    }
+    const preview   = val.replace(/\n/g, ' ');
+    const long      = val.length > 120;
+    const extraAttr = isGen  ? `data-gen="1"`
+                    : isEdit ? `data-edit="1"`
+                    : '';
+    const moreLabel = isGen  ? 'View report →'
+                    : isEdit ? 'View diff →'
+                    : 'Read more →';
+    const titleTip  = isGen  ? 'Click to view full generation report'
+                    : isEdit ? 'Click to view editing diff'
+                    : 'Click to read full content';
+    return `
+      <div class="cell">
+        <span class="cell-text"
+          data-popup="1" ${extraAttr}
+          data-bug-id="${esc(bug.bug_id)}"
+          data-col="${esc(label)}"
+          data-val="${esc(val)}"
+          title="${titleTip}"
+        >${esc(preview)}</span>
+        ${long ? `<span class="cell-more"
+          data-popup="1" ${extraAttr}
+          data-bug-id="${esc(bug.bug_id)}"
+          data-col="${esc(label)}"
+          data-val="${esc(val)}"
+        >${moreLabel}</span>` : ''}
+      </div>`;
+  }
+
+  function dupCell(refs) {
+    if (!refs?.length) return '<span class="cell-text empty">—</span>';
+    return refs.map(r => {
+      const label = issueLabel(r);
+      return r.startsWith('http')
+        ? `<a href="${esc(r)}" target="_blank" rel="noopener" class="dup-link">${esc(label)}</a>`
+        : `<span class="dup-link">${esc(r)}</span>`;
+    }).join('');
+  }
+
+  function issueLabel(url) {
+    try {
+      const u = new URL(url);
+      const gh = url.match(/github\.com\/[^/]+\/[^/]+\/issues\/(\d+)/);
+      if (gh) return `Issue #${gh[1]}`;
+      const reddit = url.match(/reddit\.com\/r\/([^/]+)/);
+      if (reddit) return `r/${reddit[1]}`;
+      return u.hostname.replace(/^www\./, '');
+    } catch {
+      return url;
+    }
+  }
+
+  function badgeValid(v) {
+    if (v === true)  return '<span class="badge badge-valid">✓ Valid</span>';
+    if (v === false) return '<span class="badge badge-invalid">✗ Invalid</span>';
+    return '<span class="badge badge-na">—</span>';
+  }
+
+  function badgeRepro(v, isValid) {
+    if (isValid === false) return '<span class="badge badge-na">N/A</span>';
+    if (v === true)  return '<span class="badge badge-yes">✓ Yes</span>';
+    if (v === false) return '<span class="badge badge-no">✗ No</span>';
+    return '<span class="badge badge-na">—</span>';
+  }
+
+  // ── Search ─────────────────────────────────────────────
+  document.getElementById('search-input').addEventListener('input', renderTable);
+
+  // ── Cell popup ─────────────────────────────────────────
+  function showPopup(bugId, col, val) {
+    document.getElementById('popup-col').textContent  = col;
+    document.getElementById('popup-id').textContent   = bugId;
+    document.getElementById('popup-text').innerHTML   = `<span style="white-space:pre-wrap;word-break:break-word">${esc(val)}</span>`;
+    document.getElementById('popup-overlay').classList.add('visible');
+  }
+
+  function showGenPopup(bugId) {
+    const bug = bugs.find(b => b.bug_id === bugId);
+    if (!bug) return;
+
+    document.getElementById('gen-bugid').textContent = bugId;
+
+    const setVal = (id, val) => {
+      const el = document.getElementById(id);
+      el.textContent = val || 'Not provided';
+      el.classList.toggle('empty', !val);
+    };
+
+    const titleEl = document.getElementById('gen-title');
+    titleEl.textContent = bug.title || 'No title';
+    titleEl.classList.toggle('empty', !bug.title);
+
+    setVal('gen-s2r', bug.s2r);
+    setVal('gen-eb',  bug.expected_behavior);
+    setVal('gen-ob',  bug.observed_behavior);
+
+    // Footer
+    document.getElementById('gen-valid').innerHTML = badgeValid(bug.is_valid_bug);
+    document.getElementById('gen-repro').innerHTML = badgeRepro(bug.is_reproducible, bug.is_valid_bug);
+
+    const dupsEl = document.getElementById('gen-dups');
+    if (bug.duplicate_refs?.length) {
+      dupsEl.innerHTML = bug.duplicate_refs.map(r =>
+        `<a href="${esc(r)}" target="_blank" rel="noopener" class="dup-link">${esc(issueLabel(r))}</a>`
+      ).join(' ');
+    } else {
+      dupsEl.innerHTML = '<span class="gen-footer-val empty">None</span>';
+    }
+
+    const fixEl   = document.getElementById('gen-fix');
+    const fixCell = document.getElementById('gen-fix-cell');
+    if (bug.is_valid_bug === false && bug.fix_suggestion) {
+      fixEl.textContent = bug.fix_suggestion;
+      fixEl.className   = 'gen-footer-val';
+      fixCell.style.display = '';
+    } else {
+      fixEl.innerHTML = '<span class="gen-footer-val empty">—</span>';
+      fixCell.style.display = bug.is_valid_bug === false ? '' : 'none';
+    }
+
+    document.getElementById('gen-overlay').classList.add('visible');
+  }
+
+  function closeGenPopup() {
+    document.getElementById('gen-overlay').classList.remove('visible');
+  }
+
+  document.getElementById('btn-close-gen').addEventListener('click', closeGenPopup);
+  document.getElementById('gen-overlay').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeGenPopup();
+  });
+
+  function closePopup() {
+    document.getElementById('popup-overlay').classList.remove('visible');
+  }
+
+  document.getElementById('btn-close-popup').addEventListener('click', closePopup);
+  document.getElementById('popup-overlay').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closePopup();
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closePopup(); closeGenPopup(); closeEditPopup(); }
+  });
+
+  // ── Results ────────────────────────────────────────────
+  const METRICS = [
+    { label: 'Generation Accuracy', method: 'LLM-as-judge' },
+    { label: 'Edit Accuracy',       method: 'LLM-as-judge' },
+    { label: 'Validity',            method: 'Binary · F1' },
+    { label: 'Fix Accuracy',        method: 'LLM-as-judge' },
+    { label: 'Duplicate Detection', method: 'Precision / Recall' },
+    { label: 'Reproducibility',     method: 'Binary' },
+  ];
+
+  function renderMetrics() {
+    document.getElementById('metrics-grid').innerHTML = METRICS.map(m => `
+      <div class="metric-card">
+        <div class="metric-label">${m.label}</div>
+        <div class="metric-score">—</div>
+        <div class="metric-method">${m.method}</div>
+      </div>
+    `).join('');
+  }
+
+  // ── Tabs ───────────────────────────────────────────────
+  document.querySelectorAll('.tab-btn').forEach(btn =>
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      ['dataset', 'results'].forEach(t =>
+        document.getElementById(`tab-${t}`).classList.toggle('hidden', t !== btn.dataset.tab)
+      );
+    })
+  );
+
+  // ── Editing diff popup ─────────────────────────────────
+  function showEditPopup(bugId) {
+    const bug = bugs.find(b => b.bug_id === bugId);
+    if (!bug) return;
+
+    document.getElementById('edit-bugid').textContent = bugId;
+
+    const reqEl = document.getElementById('edit-request-text');
+    reqEl.textContent = bug.edit_request || 'No edit request provided.';
+    reqEl.classList.toggle('empty', !bug.edit_request);
+
+    const origFields = [
+      { label: 'Title',              val: bug.title },
+      { label: 'Expected Behavior',  val: bug.expected_behavior },
+      { label: 'Observed Behavior',  val: bug.observed_behavior },
+      { label: 'Steps to Reproduce', val: bug.s2r },
+    ];
+
+    document.getElementById('diff-left').innerHTML = origFields.map(f => `
+      <div class="orig-field">
+        <div class="orig-field-label">${f.label}</div>
+        <div class="orig-field-val ${!f.val ? 'empty' : ''}">${f.val ? esc(f.val) : 'Not provided'}</div>
+      </div>
+    `).join('');
+
+    const rightEl = document.getElementById('diff-right');
+    const updated = bug.edited_report;
+    rightEl.innerHTML = updated
+      ? `<div class="updated-text">${esc(updated)}</div>`
+      : `<div class="updated-text empty">No updated report provided.</div>`;
+
+    document.getElementById('edit-overlay').classList.add('visible');
+  }
+
+  function closeEditPopup() {
+    document.getElementById('edit-overlay').classList.remove('visible');
+  }
+
+  document.getElementById('btn-close-edit').addEventListener('click', closeEditPopup);
+  document.getElementById('edit-overlay').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeEditPopup();
+  });
+
+  function esc(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  init();
+</script>
+</body>
+</html>
