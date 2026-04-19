@@ -1,0 +1,226 @@
+{
+  "runs": [
+    {
+      "run_id": "r-gen-001",
+      "label": "Claude Sonnet 4.6",
+      "model": "claude-sonnet-4-6",
+      "date": "2026-04-19",
+      "task": "generation",
+      "results": [
+        {
+          "bug_id": "BUG-001",
+          "result": true,
+          "explanation": "The generated report correctly identifies the USD currency hardcoding. Title, observed behavior, and S2R closely mirror the ground truth.",
+          "generated": {
+            "title": "Additional services prices show USD currency symbol regardless of booking currency",
+            "description": "All prices in the additional services panel display the USD symbol even when the flight is booked in a different currency.",
+            "observed_behavior": "When viewing the additional services panel (seat upgrades, baggage, meals), all prices are prefixed with the '$' (USD) symbol even when the booking currency is EUR or TRY.",
+            "expected_behavior": "Prices in the additional services panel should display the same currency symbol as the selected flight booking currency, ensuring a consistent pricing experience.",
+            "s2r": "1. Open the application and select 'Round trip'.\n2. Set departure to 'Ankara' and arrival to 'Paris'.\n3. Select 15 April as departure and 23 April as return; set 1 passenger and click 'Search'.\n4. Select a flight for each leg and fill in passenger details.\n5. On the seat and additional services screen, observe the currency symbol next to each price."
+          }
+        },
+        {
+          "bug_id": "BUG-002",
+          "result": true,
+          "explanation": "Route-specific error modal correctly identified. The generated S2R steps match the ground truth closely with the appropriate level of detail.",
+          "generated": {
+            "title": "Ankara to İzmir flight search triggers error dialog instead of results page",
+            "description": "Searching for flights from Ankara to İzmir shows an error modal and prevents navigation to the availability page.",
+            "observed_behavior": "After submitting a search with Ankara (ESB) as origin and İzmir (ADB) as destination, a modal error dialog appears and the application stays on the homepage instead of navigating to flight results.",
+            "expected_behavior": "Searching Ankara to İzmir should navigate to the availability page showing available flights for that route, consistent with any other valid city pair.",
+            "s2r": "1. Open the application and select 'One way'.\n2. In the departure field, type 'Ankara' and select 'Ankara Esenboğa (ESB)'.\n3. In the destination field, type 'İzmir' and select 'İzmir Gaziemir (ADB)'.\n4. Pick any future departure date and click 'Search'.\n5. Observe: an error modal appears instead of a list of available flights."
+          }
+        },
+        {
+          "bug_id": "BUG-003",
+          "result": false,
+          "explanation": "Core issue is described correctly but the S2R omits explicitly repeating the click multiple times before concluding the button has no effect. Minor precision gap compared to the ground truth.",
+          "generated": {
+            "title": "Passenger count '+' button has no effect in the flight search form",
+            "description": "Clicking the '+' button in the passenger selector does not change the count, which stays at 1.",
+            "observed_behavior": "Clicking the '+' button next to the passenger count field has no visible effect. The count stays at 1 no matter how many times the button is clicked.",
+            "expected_behavior": "Each click of the '+' button should increment the passenger count by 1, up to the permitted maximum, so users can search for multi-passenger bookings.",
+            "s2r": "1. Open the homepage.\n2. Find the 'Passengers' selector in the search form, which shows 1 adult by default.\n3. Click the '+' button once.\n4. Observe that the count does not change from 1.\n5. Click multiple more times and confirm the count remains unchanged."
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "r-val-001",
+      "label": "Claude Sonnet 4.6",
+      "model": "claude-sonnet-4-6",
+      "date": "2026-04-19",
+      "task": "validity",
+      "results": [
+        { "bug_id": "BUG-001", "predicted_valid": true },
+        { "bug_id": "BUG-002", "predicted_valid": true },
+        { "bug_id": "BUG-003", "predicted_valid": true },
+        { "bug_id": "BUG-004", "predicted_valid": true },
+        { "bug_id": "BUG-005", "predicted_valid": true },
+        { "bug_id": "BUG-006", "predicted_valid": true },
+        { "bug_id": "BUG-007", "predicted_valid": true },
+        { "bug_id": "BUG-008", "predicted_valid": true },
+        { "bug_id": "BUG-009", "predicted_valid": true },
+        { "bug_id": "BUG-010", "predicted_valid": true },
+        { "bug_id": "BUG-011", "predicted_valid": false },
+        { "bug_id": "BUG-012", "predicted_valid": true },
+        { "bug_id": "BUG-013", "predicted_valid": false },
+        { "bug_id": "BUG-014", "predicted_valid": true },
+        { "bug_id": "BUG-015", "predicted_valid": true },
+        { "bug_id": "BUG-016", "predicted_valid": true }
+      ]
+    },
+    {
+      "run_id": "r-val-002",
+      "label": "GPT-4o",
+      "model": "gpt-4o",
+      "date": "2026-04-19",
+      "task": "validity",
+      "results": [
+        { "bug_id": "BUG-001", "predicted_valid": true },
+        { "bug_id": "BUG-002", "predicted_valid": true },
+        { "bug_id": "BUG-003", "predicted_valid": true },
+        { "bug_id": "BUG-004", "predicted_valid": true },
+        { "bug_id": "BUG-005", "predicted_valid": true },
+        { "bug_id": "BUG-006", "predicted_valid": true },
+        { "bug_id": "BUG-007", "predicted_valid": true },
+        { "bug_id": "BUG-008", "predicted_valid": true },
+        { "bug_id": "BUG-009", "predicted_valid": true },
+        { "bug_id": "BUG-010", "predicted_valid": true },
+        { "bug_id": "BUG-011", "predicted_valid": true },
+        { "bug_id": "BUG-012", "predicted_valid": true },
+        { "bug_id": "BUG-013", "predicted_valid": true },
+        { "bug_id": "BUG-014", "predicted_valid": true },
+        { "bug_id": "BUG-015", "predicted_valid": true },
+        { "bug_id": "BUG-016", "predicted_valid": true }
+      ]
+    },
+    {
+      "run_id": "r-fix-001",
+      "label": "Claude Sonnet 4.6",
+      "model": "claude-sonnet-4-6",
+      "date": "2026-04-19",
+      "task": "fix_suggestion",
+      "results": [
+        {
+          "bug_id": "BUG-011",
+          "result": true,
+          "explanation": "The generated fix correctly identifies that Lisbon appears as 'Lizbon' in Turkish and provides clear, actionable guidance. Matches the ground truth fix intent.",
+          "generated_fix": "This is not a bug in the Turkish Airlines website. The search functionality uses Turkish city names. Lisbon is called 'Lizbon' in Turkish — type 'Lizbon' in the destination field and the city will appear correctly in the autocomplete dropdown."
+        }
+      ]
+    },
+    {
+      "run_id": "r-dup-001",
+      "label": "Claude Sonnet 4.6",
+      "model": "claude-sonnet-4-6",
+      "date": "2026-04-19",
+      "task": "duplicates",
+      "results": [
+        {
+          "bug_id": "BUG-008",
+          "detected_refs": ["https://www.reddit.com/r/TurkishAirlines/comments/1s80ta9/where_are_my_prepaid_seat_assignments/"]
+        }
+      ]
+    },
+    {
+      "run_id": "r-rep-001",
+      "label": "Claude Sonnet 4.6",
+      "model": "claude-sonnet-4-6",
+      "date": "2026-04-19",
+      "task": "reproducibility",
+      "results": [
+        {
+          "bug_id": "BUG-001",
+          "predicted_reproducible": true,
+          "agent_output": "Reproduced. On the additional services screen, all prices display '$' (USD) regardless of the EUR currency selected during the Ankara–Paris booking flow. Confirmed across three test runs.",
+          "explanation": "Clear visual bug. Agent reliably reproduced on first attempt with no flakiness."
+        },
+        {
+          "bug_id": "BUG-002",
+          "predicted_reproducible": true,
+          "agent_output": "Reproduced. Selecting Ankara (ESB) → İzmir (ADB) and clicking Search triggers a modal error dialog. The availability page is never shown. No console errors observed; the block appears to be server-side.",
+          "explanation": "Consistently reproducible. The route appears to be blocked by hardcoded validation on the server side."
+        },
+        {
+          "bug_id": "BUG-003",
+          "predicted_reproducible": true,
+          "agent_output": "Reproduced. Clicking '+' in the passenger selector produces no UI change. Network tab shows no XHR requests are fired on click. The counter remains at 1 regardless of how many times the button is pressed.",
+          "explanation": "DOM inspection confirms the click handler is attached but the state variable is not updated. Reproducible 100% of the time."
+        },
+        {
+          "bug_id": "BUG-004",
+          "predicted_reproducible": true,
+          "agent_output": "Reproduced. The confirmation screen total shows only seat (€12) and baggage (€18) fees. The base flight fare (€340) is completely absent from both the line-item breakdown and the final sum.",
+          "explanation": "Reproducible whenever at least one optional service is selected. The base fare line item appears to be excluded from the totalling logic on the confirmation screen."
+        },
+        {
+          "bug_id": "BUG-005",
+          "predicted_reproducible": true,
+          "agent_output": "Reproduced. Ticking the terms checkbox with all payment fields empty immediately triggers the 'Payment ready to submit' status indicator. No validation is performed on the empty card fields at that point.",
+          "explanation": "Trivially reproducible on first visit to the payment page. Validation logic appears to depend solely on the checkbox state rather than field completeness."
+        },
+        {
+          "bug_id": "BUG-006",
+          "predicted_reproducible": true,
+          "agent_output": "Reproduced. Typing 'aBC123' into the card number field displays 'aBC123' without filtering or an error message. Same behavior confirmed in the expiry date and security code fields.",
+          "explanation": "Input sanitization is absent across all three card fields. Reproducible on every attempt; no browser-level input type restriction is applied."
+        },
+        {
+          "bug_id": "BUG-007",
+          "predicted_reproducible": true,
+          "agent_output": "Reproduced. After clicking 'Increasing by price', flights reorder with the most expensive fare first. The sort button renders in its active/selected state, implying the sort was applied correctly when it was not.",
+          "explanation": "The sort comparator appears to be inverted. Reproducible on any route with more than one fare class."
+        },
+        {
+          "bug_id": "BUG-008",
+          "predicted_reproducible": true,
+          "agent_output": "Reproduced. After triggering seat reset via the admin panel ('/admin' → 'Trigger seat reset'), the itinerary view shows 'Seat assignment missing' for all Turkish Airlines legs while the seat fee (€12/leg) remains in the price breakdown with no refund prompt.",
+          "explanation": "Requires admin panel access to trigger. The seat fee refund flow is not initiated after reset. Both issues are consistently observable once the reset is triggered."
+        },
+        {
+          "bug_id": "BUG-009",
+          "predicted_reproducible": true,
+          "agent_output": "Reproduced. After selecting 'Stopover in Istanbul' and entering 'London Heathrow (LHR)' as destination, the results page URL contains destination code 'AYT' (Antalya). All displayed flights are to Antalya, not London.",
+          "explanation": "The destination override appears to be hardcoded for the Stopover trip type. Reproducible with any destination entered."
+        },
+        {
+          "bug_id": "BUG-010",
+          "predicted_reproducible": true,
+          "agent_output": "Reproduced. After Shift+Left selects the last character, pressing Shift+Home selects the full line but drops that initially selected last character. Confirmed in both Chrome 124 and Firefox 125.",
+          "explanation": "Cross-browser issue. Likely an off-by-one in Notion's text selection cursor position tracking."
+        },
+        {
+          "bug_id": "BUG-012",
+          "predicted_reproducible": true,
+          "agent_output": "Reproduced. Over 10 page refreshes: 4 items visible on 3 refreshes, 5 items on 6 refreshes, 3 items on 1 refresh. The visible set is non-deterministic and changes on every load.",
+          "explanation": "The demo page intentionally randomizes navigation items to simulate disappearing elements. Reproduced correctly as a non-deterministic behavior."
+        },
+        {
+          "bug_id": "BUG-013",
+          "predicted_reproducible": false,
+          "agent_output": "Could not reproduce as a bug. The navigation menu remained fixed at the top of the viewport throughout scrolling. This is the expected behavior of the 'Floating Menu' demo — the page is specifically designed to showcase a sticky navigation.",
+          "explanation": "BUG-013 describes intentional behavior, not a defect. The agent correctly identified this as non-reproducible as a bug. The ground truth classification of this as reproducible is debatable."
+        },
+        {
+          "bug_id": "BUG-014",
+          "predicted_reproducible": true,
+          "agent_output": "Reproduced. Logging in as problem_user shows identical dog photographs across all 6 product cards. Selecting 'Price (low to high)' from the sort dropdown produces no reordering of the product list.",
+          "explanation": "Both issues consistently reproducible with the problem_user account. This appears to be a deliberately broken test user in the saucedemo sandbox."
+        },
+        {
+          "bug_id": "BUG-015",
+          "predicted_reproducible": true,
+          "agent_output": "Reproduced. With error_user credentials, clicking the Last Name field in checkout and typing any text produces no characters in the field. First Name and Postal Code fields accept input normally, confirming the issue is isolated to Last Name.",
+          "explanation": "Isolated to the Last Name field for the error_user account. Reproducible on every checkout attempt without exception."
+        },
+        {
+          "bug_id": "BUG-016",
+          "predicted_reproducible": true,
+          "agent_output": "Reproduced. With visual_user credentials, the 'Add to cart' button on each product card visibly extends beyond the card border by approximately 8px. The shopping cart icon in the page header is shifted roughly 40px to the left of its expected position.",
+          "explanation": "CSS layout defect specific to visual_user. Both the button overflow and cart icon displacement are consistently observable on page load."
+        }
+      ]
+    }
+  ]
+}

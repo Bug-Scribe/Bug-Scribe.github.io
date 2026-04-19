@@ -143,9 +143,9 @@
 
     .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border-med); }
     .dot.green   { background: var(--green); }
+    .dot.crimson { background: var(--crimson); }
     .dot.blue    { background: var(--blue); }
     .dot.orange  { background: var(--a-dup); }
-    .dot.crimson { background: var(--crimson); }
 
     /* ── Toolbar ────────────────────────────────────── */
     .toolbar { display: flex; align-items: center; gap: 9px; margin-bottom: 16px; }
@@ -272,7 +272,7 @@
       vertical-align: top;
     }
 
-    /* Cell inner — content sits here */
+    /* Cell inner */
     .cell {
       padding: 8px 10px;
       min-height: 56px;
@@ -284,9 +284,9 @@
     }
 
     .cell.cell-id    { min-width: 80px; max-width: 80px; }
-    .cell.cell-repo  { min-width: 140px; max-width: 140px; }
+    .cell.cell-repo  { min-width: 90px; max-width: 90px; }
     .cell.cell-badge { min-width: 90px; max-width: 90px; align-items: flex-start; justify-content: center; min-height: 56px; }
-    .cell.cell-dup   { min-width: 160px; max-width: 160px; }
+    .cell.cell-dup   { min-width: 110px; max-width: 110px; }
 
     .cell-id-text {
       font-size: 11px;
@@ -343,6 +343,8 @@
     .badge-yes     { background: var(--blue-light); color: var(--blue); }
     .badge-no      { background: var(--gray-light); color: var(--gray); }
     .badge-na      { background: var(--gray-light); color: var(--gray); }
+    .badge-match   { background: var(--green-light); color: var(--green); }
+    .badge-miss    { background: var(--crimson-light); color: var(--crimson); }
 
     .dup-link {
       display: inline-block;
@@ -385,7 +387,6 @@
 
     .gen-overlay.visible .gen-popup { transform: translateY(0); }
 
-    /* Header bar */
     .gen-header {
       background: var(--ink);
       padding: 14px 20px;
@@ -415,7 +416,6 @@
 
     .btn-icon-inv:hover { background: rgba(255,255,255,0.22); color: white; }
 
-    /* Title strip */
     .gen-title-strip {
       background: var(--g-gen);
       border-bottom: 2px solid var(--a-gen);
@@ -436,7 +436,6 @@
 
     .gen-title-text.empty { color: var(--text-muted); font-style: italic; font-size: 14px; }
 
-    /* Three-column body */
     .gen-body {
       flex: 1;
       display: grid;
@@ -478,7 +477,6 @@
 
     .gen-col-val.empty { color: var(--text-muted); font-style: italic; }
 
-    /* Footer row */
     .gen-footer {
       display: flex;
       border-top: 2px solid var(--border);
@@ -548,7 +546,6 @@
     .edit-eyebrow { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.45); }
     .edit-bugid   { font-size: 15px; font-weight: 700; color: white; }
 
-    /* Edit request banner */
     .edit-request-banner {
       background: #fdf8ec;
       border-bottom: 2px solid #c4a030;
@@ -569,7 +566,6 @@
 
     .edit-request-text.empty { color: var(--text-muted); }
 
-    /* Split diff panels */
     .edit-body {
       flex: 1;
       display: grid;
@@ -606,7 +602,6 @@
       padding: 14px 18px;
     }
 
-    /* Original report fields (left panel) */
     .orig-field { margin-bottom: 14px; }
     .orig-field:last-child { margin-bottom: 0; }
 
@@ -623,7 +618,6 @@
 
     .orig-field-val.empty { color: var(--text-muted); font-style: italic; }
 
-    /* Updated text (right panel) */
     .updated-text {
       font-size: 12.5px; color: var(--text-strong);
       line-height: 1.75; white-space: pre-wrap; word-break: break-word;
@@ -631,7 +625,103 @@
 
     .updated-text.empty { color: var(--text-muted); font-style: italic; }
 
-    /* Empty state */
+    /* ── Comparison popup (GT vs Generated) ─────────── */
+    .cmp-overlay {
+      position: fixed; inset: 0;
+      z-index: 500;
+      display: flex; align-items: center; justify-content: center;
+      padding: 28px;
+      background: rgba(11,23,34,0.45);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s;
+    }
+
+    .cmp-overlay.visible { opacity: 1; pointer-events: all; }
+
+    .cmp-popup {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      width: 100%; max-width: 1100px;
+      height: 70vh;
+      display: flex; flex-direction: column;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      transform: translateY(10px);
+      transition: transform 0.22s;
+    }
+
+    .cmp-overlay.visible .cmp-popup { transform: translateY(0); }
+
+    .cmp-header {
+      background: var(--ink);
+      padding: 14px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .cmp-eyebrow { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.45); }
+    .cmp-bugid   { font-size: 15px; font-weight: 700; color: white; }
+
+    .cmp-body {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      overflow: hidden;
+    }
+
+    .cmp-panel {
+      display: flex; flex-direction: column;
+      border-right: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .cmp-panel:last-child { border-right: none; }
+
+    .cmp-panel-head {
+      padding: 10px 18px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .cmp-panel-head.gt   { background: #f0f3f7; }
+    .cmp-panel-head.gen  { background: var(--g-gen); }
+
+    .cmp-panel-label {
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.09em;
+    }
+
+    .cmp-panel-head.gt  .cmp-panel-label { color: var(--a-core); }
+    .cmp-panel-head.gen .cmp-panel-label { color: var(--a-gen); }
+
+    .cmp-panel-sub {
+      font-size: 10px; color: var(--text-muted);
+      margin-top: 1px;
+    }
+
+    .cmp-panel-body {
+      flex: 1; overflow-y: auto;
+      padding: 14px 18px;
+    }
+
+    .cmp-explanation {
+      padding: 11px 20px;
+      border-top: 2px solid var(--border-med);
+      background: #fffdf8;
+      font-size: 12px;
+      color: var(--text-strong);
+      line-height: 1.6;
+      flex-shrink: 0;
+    }
+
+    .cmp-explanation-label {
+      font-size: 9px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.09em;
+      color: var(--text-muted);
+      margin-right: 8px;
+    }
+
+    /* ── Empty state ────────────────────────────────── */
     .empty-state {
       text-align: center; padding: 60px 24px; color: var(--text-muted);
     }
@@ -699,36 +789,185 @@
     }
 
     /* ── Results tab ────────────────────────────────── */
-    .results-header { margin-bottom: 24px; }
-    .results-header h3 { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
-    .results-header p  { color: var(--text-muted); font-size: 13px; }
-
-    .metrics-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 14px;
+    .task-tabs-bar {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 20px;
     }
 
-    .metric-card {
+    .task-tab-btn {
+      padding: 9px 15px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      font-family: inherit;
+      margin-bottom: -1px;
+      transition: color 0.15s, border-color 0.15s;
+      white-space: nowrap;
+    }
+
+    .task-tab-btn:hover  { color: var(--text-strong); }
+    .task-tab-btn.active { color: var(--crimson); border-bottom-color: var(--crimson); }
+
+    .results-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 16px;
+    }
+
+    .run-selector-wrap {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .run-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .run-select {
+      padding: 7px 11px;
+      border: 1px solid var(--border-med);
+      border-radius: var(--radius);
+      font-size: 13px;
+      font-family: inherit;
+      background: var(--white);
+      color: var(--text-strong);
+      outline: none;
+      cursor: pointer;
+      min-width: 260px;
+    }
+
+    .run-select:focus {
+      border-color: var(--crimson);
+      box-shadow: 0 0 0 3px rgba(196,19,47,0.09);
+    }
+
+    .results-summary {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .results-summary strong { color: var(--text-strong); font-weight: 700; }
+
+    /* Results table */
+    .rtable-wrap {
       background: var(--white);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: 18px 20px;
+      overflow: auto;
       box-shadow: var(--shadow-sm);
+      max-height: calc(100vh - 300px);
     }
 
-    .metric-label {
-      font-size: 10px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.07em;
-      color: var(--text-muted); margin-bottom: 10px;
+    .rtable {
+      border-collapse: collapse;
+      width: 100%;
     }
 
-    .metric-score {
-      font-size: 28px; font-weight: 800;
-      color: #d0d5db; line-height: 1;
+    .rtable thead th {
+      padding: 9px 14px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-muted);
+      background: #f6f7f9;
+      border-bottom: 2px solid var(--border-med);
+      white-space: nowrap;
+      text-align: left;
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
 
-    .metric-method { font-size: 11px; color: var(--text-muted); margin-top: 8px; }
+    .rtable tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.08s;
+    }
+
+    .rtable tbody tr:last-child { border-bottom: none; }
+    .rtable tbody tr:hover { background: #fafaf8; }
+
+    .rtable tbody td {
+      padding: 10px 14px;
+      vertical-align: top;
+    }
+
+    .rtext {
+      font-size: 12px;
+      color: var(--text-strong);
+      line-height: 1.55;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .rrow { cursor: pointer; }
+    .rrow:hover .rtext { color: var(--crimson); }
+    .rrow.rrow-expanded { background: #f5f7fc; }
+    .rrow.rrow-expanded:hover { background: #f5f7fc; }
+    .rrow.rrow-expanded td:first-child { background: #f5f7fc; }
+
+    .rrow-detail > td { padding: 0; background: #f8f9fc; border-top: 1px solid var(--border-med); }
+
+    .rrow-expand { display: flex; flex-direction: column; }
+
+    .rrow-expand-panels {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      max-height: 320px;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .rrow-panel {
+      display: flex; flex-direction: column;
+      border-right: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .rrow-panel:last-child { border-right: none; }
+
+    .rrow-panel-head {
+      padding: 8px 16px;
+      font-size: 9px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.09em;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .rrow-panel-head.gt-head   { background: #f0f3f7; color: var(--a-core); }
+    .rrow-panel-head.gen-head  { background: var(--g-gen); color: var(--a-gen); }
+    .rrow-panel-head.eval-head { background: var(--g-repro); color: var(--a-repro); }
+
+    .rrow-panel-body { flex: 1; overflow-y: auto; padding: 12px 16px; }
+
+    .rrow-explanation {
+      padding: 10px 16px;
+      background: #fffdf8;
+      border-top: 1px solid var(--border);
+      font-size: 12px; color: var(--text-strong); line-height: 1.6;
+    }
+
+    .rrow-explanation-label {
+      display: inline-block;
+      font-size: 9px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.09em;
+      color: var(--text-muted); margin-right: 8px;
+    }
 
     .hidden { display: none !important; }
 
@@ -805,44 +1044,23 @@
 
 <!-- Results tab -->
 <div id="tab-results" class="page hidden">
-  <div class="results-header">
-    <h3>Benchmark Results</h3>
-    <p>Run the BugScribe pipeline against the dataset to populate scores.</p>
-  </div>
-  <div class="metrics-grid" id="metrics-grid"></div>
-</div>
+  <nav class="task-tabs-bar">
+    <button class="task-tab-btn active" data-task="generation">Generation</button>
+    <button class="task-tab-btn" data-task="validity">Validity</button>
+    <button class="task-tab-btn" data-task="fix_suggestion">Fix Suggestion</button>
+    <button class="task-tab-btn" data-task="duplicates">Duplicates</button>
+    <button class="task-tab-btn" data-task="reproducibility">Reproducibility</button>
+  </nav>
 
-<!-- Editing diff popup -->
-<div class="edit-overlay" id="edit-overlay">
-  <div class="edit-popup">
-    <div class="edit-header">
-      <div>
-        <div class="edit-eyebrow">Editing Diff</div>
-        <div class="edit-bugid" id="edit-bugid"></div>
-      </div>
-      <button class="btn-icon-inv" id="btn-close-edit" title="Close">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
-      </button>
+  <div class="results-toolbar">
+    <div class="run-selector-wrap">
+      <span class="run-label">Run</span>
+      <select class="run-select" id="run-select"></select>
     </div>
-    <div class="edit-request-banner">
-      <div class="edit-request-label">Edit Request</div>
-      <div class="edit-request-text" id="edit-request-text"></div>
-    </div>
-    <div class="edit-body">
-      <div class="diff-panel">
-        <div class="diff-panel-head left">
-          <span class="diff-panel-label">Original Report</span>
-        </div>
-        <div class="diff-panel-body" id="diff-left"></div>
-      </div>
-      <div class="diff-panel">
-        <div class="diff-panel-head right">
-          <span class="diff-panel-label">Updated</span>
-        </div>
-        <div class="diff-panel-body" id="diff-right"></div>
-      </div>
-    </div>
+    <div class="results-summary" id="results-summary"></div>
   </div>
+
+  <div id="results-content"></div>
 </div>
 
 <!-- Generation report popup -->
@@ -896,6 +1114,134 @@
   </div>
 </div>
 
+<!-- Editing diff popup -->
+<div class="edit-overlay" id="edit-overlay">
+  <div class="edit-popup">
+    <div class="edit-header">
+      <div>
+        <div class="edit-eyebrow">Editing Diff</div>
+        <div class="edit-bugid" id="edit-bugid"></div>
+      </div>
+      <button class="btn-icon-inv" id="btn-close-edit" title="Close">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="edit-request-banner">
+      <div class="edit-request-label">Edit Request</div>
+      <div class="edit-request-text" id="edit-request-text"></div>
+    </div>
+    <div class="edit-body">
+      <div class="diff-panel">
+        <div class="diff-panel-head left">
+          <span class="diff-panel-label">Original Report</span>
+        </div>
+        <div class="diff-panel-body" id="diff-left"></div>
+      </div>
+      <div class="diff-panel">
+        <div class="diff-panel-head right">
+          <span class="diff-panel-label">Updated</span>
+        </div>
+        <div class="diff-panel-body" id="diff-right"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Generation comparison popup (GT vs Generated) -->
+<div class="cmp-overlay" id="cmp-overlay">
+  <div class="cmp-popup">
+    <div class="cmp-header">
+      <div>
+        <div class="cmp-eyebrow">Generation Comparison</div>
+        <div class="cmp-bugid" id="cmp-bugid"></div>
+      </div>
+      <button class="btn-icon-inv" id="btn-close-cmp" title="Close">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="cmp-body">
+      <div class="cmp-panel">
+        <div class="cmp-panel-head gt">
+          <div class="cmp-panel-label">Ground Truth</div>
+          <div class="cmp-panel-sub">Dataset reference</div>
+        </div>
+        <div class="cmp-panel-body" id="cmp-gt"></div>
+      </div>
+      <div class="cmp-panel">
+        <div class="cmp-panel-head gen">
+          <div class="cmp-panel-label">Generated</div>
+          <div class="cmp-panel-sub" id="cmp-model-label"></div>
+        </div>
+        <div class="cmp-panel-body" id="cmp-gen"></div>
+      </div>
+    </div>
+    <div class="cmp-explanation" id="cmp-explanation"></div>
+  </div>
+</div>
+
+<!-- Fix suggestion detail popup -->
+<div class="cmp-overlay" id="fix-overlay">
+  <div class="cmp-popup">
+    <div class="cmp-header">
+      <div>
+        <div class="cmp-eyebrow">Fix Suggestion Detail</div>
+        <div class="cmp-bugid" id="fix-bugid"></div>
+      </div>
+      <button class="btn-icon-inv" id="btn-close-fix" title="Close">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="cmp-body">
+      <div class="cmp-panel">
+        <div class="cmp-panel-head gt">
+          <div class="cmp-panel-label">Ground Truth Fix</div>
+          <div class="cmp-panel-sub">Dataset reference</div>
+        </div>
+        <div class="cmp-panel-body" id="fix-gt"></div>
+      </div>
+      <div class="cmp-panel">
+        <div class="cmp-panel-head gen">
+          <div class="cmp-panel-label">Generated Fix</div>
+          <div class="cmp-panel-sub" id="fix-model-label"></div>
+        </div>
+        <div class="cmp-panel-body" id="fix-gen"></div>
+      </div>
+    </div>
+    <div class="cmp-explanation" id="fix-explanation"></div>
+  </div>
+</div>
+
+<!-- Reproducibility detail popup -->
+<div class="cmp-overlay" id="repro-overlay">
+  <div class="cmp-popup">
+    <div class="cmp-header">
+      <div>
+        <div class="cmp-eyebrow">Reproducibility Detail</div>
+        <div class="cmp-bugid" id="repro-bugid"></div>
+      </div>
+      <button class="btn-icon-inv" id="btn-close-repro" title="Close">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="cmp-body">
+      <div class="cmp-panel">
+        <div class="cmp-panel-head gt">
+          <div class="cmp-panel-label">Agent Input — Bug Report</div>
+          <div class="cmp-panel-sub">Ground truth report</div>
+        </div>
+        <div class="cmp-panel-body" id="repro-input"></div>
+      </div>
+      <div class="cmp-panel">
+        <div class="cmp-panel-head" style="background: var(--g-repro); border-bottom: 1px solid var(--border);">
+          <div class="cmp-panel-label" style="color: var(--a-repro);">Evaluation</div>
+          <div class="cmp-panel-sub" id="repro-model-label"></div>
+        </div>
+        <div class="cmp-panel-body" id="repro-eval"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Cell content popup -->
 <div class="popup-overlay" id="popup-overlay">
   <div class="popup">
@@ -916,6 +1262,8 @@
 
 <script>
   let bugs = [];
+  let runData = [];
+  let activeTask = 'generation';
 
   async function init() {
     try {
@@ -923,14 +1271,20 @@
       if (!res.ok) throw new Error();
       bugs = (await res.json()).bugs || [];
     } catch { bugs = []; }
+
+    try {
+      const res = await fetch('./benchmark-results.json');
+      if (res.ok) runData = (await res.json()).runs || [];
+    } catch { runData = []; }
+
     renderStats();
     renderTable();
-    renderMetrics();
+    renderResultsTab();
   }
 
   // ── Stats ──────────────────────────────────────────────
   function renderStats() {
-    const total = bugs.length;
+    const total   = bugs.length;
     const valid   = bugs.filter(b => b.is_valid_bug === true).length;
     const invalid = bugs.filter(b => b.is_valid_bug === false).length;
     const repro   = bugs.filter(b => b.is_reproducible === true).length;
@@ -944,7 +1298,7 @@
     `;
   }
 
-  // ── Table ──────────────────────────────────────────────
+  // ── Dataset table ──────────────────────────────────────
   function renderTable() {
     const q = document.getElementById('search-input').value.toLowerCase().trim();
     const rows = q
@@ -1023,10 +1377,9 @@
       </tr>
     `).join('');
 
-    // Click handlers for text cells
     tbody.querySelectorAll('[data-popup]').forEach(el => {
       el.addEventListener('click', () => {
-        if (el.dataset.gen)  showGenPopup(el.dataset.bugId);
+        if (el.dataset.gen)       showGenPopup(el.dataset.bugId);
         else if (el.dataset.edit) showEditPopup(el.dataset.bugId);
         else showPopup(el.dataset.bugId, el.dataset.col, el.dataset.val);
       });
@@ -1035,17 +1388,11 @@
 
   function textCell(bug, field, label, isGen = false, isEdit = false) {
     const val = bug[field];
-    if (!val) {
-      return `<div class="cell"><span class="cell-text empty">—</span></div>`;
-    }
+    if (!val) return `<div class="cell"><span class="cell-text empty">—</span></div>`;
     const preview   = val.replace(/\n/g, ' ');
     const long      = val.length > 120;
-    const extraAttr = isGen  ? `data-gen="1"`
-                    : isEdit ? `data-edit="1"`
-                    : '';
-    const moreLabel = isGen  ? 'View report →'
-                    : isEdit ? 'View diff →'
-                    : 'Read more →';
+    const extraAttr = isGen  ? `data-gen="1"` : isEdit ? `data-edit="1"` : '';
+    const moreLabel = isGen  ? 'View report →' : isEdit ? 'View diff →' : 'Read more →';
     const titleTip  = isGen  ? 'Click to view full generation report'
                     : isEdit ? 'Click to view editing diff'
                     : 'Click to read full content';
@@ -1080,10 +1427,12 @@
   function issueLabel(url) {
     try {
       const u = new URL(url);
-      const gh = url.match(/github\.com\/[^/]+\/[^/]+\/issues\/(\d+)/);
+      const gh = url.match(/\/issues\/(\d+)/);
       if (gh) return `Issue #${gh[1]}`;
-      const reddit = url.match(/reddit\.com\/r\/([^/]+)/);
-      if (reddit) return `r/${reddit[1]}`;
+      if (u.hostname.includes('reddit.com')) {
+        const m = url.match(/\/r\/([^/]+)/);
+        return m ? `r/${m[1]}` : 'Reddit';
+      }
       return u.hostname.replace(/^www\./, '');
     } catch {
       return url;
@@ -1103,10 +1452,16 @@
     return '<span class="badge badge-na">—</span>';
   }
 
+  function matchBadge(match) {
+    return match
+      ? '<span class="badge badge-match">✓ Match</span>'
+      : '<span class="badge badge-miss">✗ Miss</span>';
+  }
+
   // ── Search ─────────────────────────────────────────────
   document.getElementById('search-input').addEventListener('input', renderTable);
 
-  // ── Cell popup ─────────────────────────────────────────
+  // ── Dataset cell popup ─────────────────────────────────
   function showPopup(bugId, col, val) {
     document.getElementById('popup-col').textContent  = col;
     document.getElementById('popup-id').textContent   = bugId;
@@ -1134,7 +1489,6 @@
     setVal('gen-eb',  bug.expected_behavior);
     setVal('gen-ob',  bug.observed_behavior);
 
-    // Footer
     document.getElementById('gen-valid').innerHTML = badgeValid(bug.is_valid_bug);
     document.getElementById('gen-repro').innerHTML = badgeRepro(bug.is_reproducible, bug.is_valid_bug);
 
@@ -1161,58 +1515,13 @@
     document.getElementById('gen-overlay').classList.add('visible');
   }
 
-  function closeGenPopup() {
-    document.getElementById('gen-overlay').classList.remove('visible');
-  }
-
+  function closeGenPopup() { document.getElementById('gen-overlay').classList.remove('visible'); }
   document.getElementById('btn-close-gen').addEventListener('click', closeGenPopup);
-  document.getElementById('gen-overlay').addEventListener('click', e => {
-    if (e.target === e.currentTarget) closeGenPopup();
-  });
+  document.getElementById('gen-overlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeGenPopup(); });
 
-  function closePopup() {
-    document.getElementById('popup-overlay').classList.remove('visible');
-  }
-
+  function closePopup() { document.getElementById('popup-overlay').classList.remove('visible'); }
   document.getElementById('btn-close-popup').addEventListener('click', closePopup);
-  document.getElementById('popup-overlay').addEventListener('click', e => {
-    if (e.target === e.currentTarget) closePopup();
-  });
-
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') { closePopup(); closeGenPopup(); closeEditPopup(); }
-  });
-
-  // ── Results ────────────────────────────────────────────
-  const METRICS = [
-    { label: 'Generation Accuracy', method: 'LLM-as-judge' },
-    { label: 'Edit Accuracy',       method: 'LLM-as-judge' },
-    { label: 'Validity',            method: 'Binary · F1' },
-    { label: 'Fix Accuracy',        method: 'LLM-as-judge' },
-    { label: 'Duplicate Detection', method: 'Precision / Recall' },
-    { label: 'Reproducibility',     method: 'Binary' },
-  ];
-
-  function renderMetrics() {
-    document.getElementById('metrics-grid').innerHTML = METRICS.map(m => `
-      <div class="metric-card">
-        <div class="metric-label">${m.label}</div>
-        <div class="metric-score">—</div>
-        <div class="metric-method">${m.method}</div>
-      </div>
-    `).join('');
-  }
-
-  // ── Tabs ───────────────────────────────────────────────
-  document.querySelectorAll('.tab-btn').forEach(btn =>
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      ['dataset', 'results'].forEach(t =>
-        document.getElementById(`tab-${t}`).classList.toggle('hidden', t !== btn.dataset.tab)
-      );
-    })
-  );
+  document.getElementById('popup-overlay').addEventListener('click', e => { if (e.target === e.currentTarget) closePopup(); });
 
   // ── Editing diff popup ─────────────────────────────────
   function showEditPopup(bugId) {
@@ -1248,14 +1557,411 @@
     document.getElementById('edit-overlay').classList.add('visible');
   }
 
-  function closeEditPopup() {
-    document.getElementById('edit-overlay').classList.remove('visible');
+  function closeEditPopup() { document.getElementById('edit-overlay').classList.remove('visible'); }
+  document.getElementById('btn-close-edit').addEventListener('click', closeEditPopup);
+  document.getElementById('edit-overlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeEditPopup(); });
+
+  // ── Generation comparison popup ────────────────────────
+  function showGenCmpPopup(bugId, runId) {
+    const bug    = bugs.find(b => b.bug_id === bugId);
+    const run    = runData.find(r => r.run_id === runId);
+    const result = run?.results?.find(r => r.bug_id === bugId);
+    if (!bug || !result) return;
+
+    document.getElementById('cmp-bugid').textContent       = bugId;
+    document.getElementById('cmp-model-label').textContent = `${run.label} · ${run.date}`;
+    document.getElementById('cmp-gt').innerHTML  = renderFieldList(bug, ['title','description','observed_behavior','expected_behavior','s2r']);
+    document.getElementById('cmp-gen').innerHTML = renderFieldList(result.generated || {}, ['title','description','observed_behavior','expected_behavior','s2r']);
+
+    const expEl = document.getElementById('cmp-explanation');
+    if (result.explanation) {
+      expEl.innerHTML = `<span class="cmp-explanation-label">Explanation</span>${esc(result.explanation)}`;
+      expEl.style.display = '';
+    } else {
+      expEl.style.display = 'none';
+    }
+
+    document.getElementById('cmp-overlay').classList.add('visible');
   }
 
-  document.getElementById('btn-close-edit').addEventListener('click', closeEditPopup);
-  document.getElementById('edit-overlay').addEventListener('click', e => {
-    if (e.target === e.currentTarget) closeEditPopup();
+  function closeCmpPopup() { document.getElementById('cmp-overlay').classList.remove('visible'); }
+  document.getElementById('btn-close-cmp').addEventListener('click', closeCmpPopup);
+  document.getElementById('cmp-overlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeCmpPopup(); });
+
+  // ── Reproducibility detail popup ───────────────────────
+  function showReproPopup(bugId, runId) {
+    const bug    = bugs.find(b => b.bug_id === bugId);
+    const run    = runData.find(r => r.run_id === runId);
+    const result = run?.results?.find(r => r.bug_id === bugId);
+    if (!bug || !result) return;
+
+    document.getElementById('repro-bugid').textContent       = bugId;
+    document.getElementById('repro-model-label').textContent = `${run.label} · ${run.date}`;
+    document.getElementById('repro-input').innerHTML = renderFieldList(bug, ['title','description','observed_behavior','expected_behavior','s2r']);
+
+    const match = result.predicted_reproducible === bug.is_reproducible;
+    const resultBadge = match
+      ? '<span class="badge badge-match">✓ Correct</span>'
+      : '<span class="badge badge-miss">✗ Incorrect</span>';
+
+    document.getElementById('repro-eval').innerHTML = `
+      <div class="orig-field">
+        <div class="orig-field-label">Result</div>
+        <div>${resultBadge}</div>
+      </div>
+      <div class="orig-field">
+        <div class="orig-field-label">Reproduction Agent Output</div>
+        <div class="orig-field-val ${!result.agent_output ? 'empty' : ''}">${esc(result.agent_output || 'Not provided')}</div>
+      </div>
+      <div class="orig-field">
+        <div class="orig-field-label">Our Explanation</div>
+        <div class="orig-field-val ${!result.explanation ? 'empty' : ''}">${esc(result.explanation || 'Not provided')}</div>
+      </div>`;
+
+    document.getElementById('repro-overlay').classList.add('visible');
+  }
+
+  function closeReproPopup() { document.getElementById('repro-overlay').classList.remove('visible'); }
+  document.getElementById('btn-close-repro').addEventListener('click', closeReproPopup);
+  document.getElementById('repro-overlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeReproPopup(); });
+
+  // ── Fix suggestion detail popup ────────────────────────
+  function showFixPopup(bugId, runId) {
+    const bug    = bugs.find(b => b.bug_id === bugId);
+    const run    = runData.find(r => r.run_id === runId);
+    const result = run?.results?.find(r => r.bug_id === bugId);
+    if (!bug || !result) return;
+
+    document.getElementById('fix-bugid').textContent       = bugId;
+    document.getElementById('fix-model-label').textContent = `${run.label} · ${run.date}`;
+
+    const gtEl = document.getElementById('fix-gt');
+    gtEl.innerHTML = `
+      <div class="orig-field">
+        <div class="orig-field-label">Description</div>
+        <div class="orig-field-val">${esc(bug.description || 'Not provided')}</div>
+      </div>
+      <div class="orig-field">
+        <div class="orig-field-label">Fix Suggestion</div>
+        <div class="orig-field-val ${!bug.fix_suggestion ? 'empty' : ''}">${esc(bug.fix_suggestion || 'Not provided')}</div>
+      </div>`;
+
+    const resultBadge = result.result === true
+      ? '<span class="badge badge-match">✓ Correct</span>'
+      : '<span class="badge badge-miss">✗ Incorrect</span>';
+
+    document.getElementById('fix-gen').innerHTML = `
+      <div class="orig-field">
+        <div class="orig-field-label">Result</div>
+        <div>${resultBadge}</div>
+      </div>
+      <div class="orig-field">
+        <div class="orig-field-label">Generated Fix</div>
+        <div class="orig-field-val ${!result.generated_fix ? 'empty' : ''}">${esc(result.generated_fix || 'Not provided')}</div>
+      </div>`;
+
+    const expEl = document.getElementById('fix-explanation');
+    if (result.explanation) {
+      expEl.innerHTML = `<span class="cmp-explanation-label">Explanation</span>${esc(result.explanation)}`;
+      expEl.style.display = '';
+    } else {
+      expEl.style.display = 'none';
+    }
+
+    document.getElementById('fix-overlay').classList.add('visible');
+  }
+
+  function closeFixPopup() { document.getElementById('fix-overlay').classList.remove('visible'); }
+  document.getElementById('btn-close-fix').addEventListener('click', closeFixPopup);
+  document.getElementById('fix-overlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeFixPopup(); });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closePopup(); closeGenPopup(); closeEditPopup(); closeCmpPopup(); closeReproPopup(); closeFixPopup(); }
   });
+
+  // ── Results tab ────────────────────────────────────────
+  function runsForTask(task) {
+    return runData.filter(r => r.task === task);
+  }
+
+  function renderResultsTab() {
+    const runs = runsForTask(activeTask);
+    const sel  = document.getElementById('run-select');
+
+    if (runs.length === 0) {
+      sel.innerHTML = '<option value="">— no runs yet —</option>';
+      sel.disabled  = true;
+    } else {
+      sel.disabled  = false;
+      sel.innerHTML = runs.map(r =>
+        `<option value="${esc(r.run_id)}">${esc(r.label)} · ${esc(r.date)}</option>`
+      ).join('');
+    }
+
+    renderResultsContent();
+  }
+
+  function renderResultsContent() {
+    const runs    = runsForTask(activeTask);
+    const runId   = document.getElementById('run-select').value;
+    const run     = runs.find(r => r.run_id === runId) || runs[0];
+    const content = document.getElementById('results-content');
+    const summary = document.getElementById('results-summary');
+
+    if (!run) {
+      content.innerHTML = `<div class="empty-state">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <p>No runs for this task yet.</p>
+      </div>`;
+      summary.innerHTML = '';
+      return;
+    }
+
+    switch (activeTask) {
+      case 'generation':      renderGenerationTable(run, content, summary);    break;
+      case 'validity':        renderValidityTable(run, content, summary);      break;
+      case 'fix_suggestion':  renderFixTable(run, content, summary);           break;
+      case 'duplicates':      renderDupResultTable(run, content, summary);     break;
+      case 'reproducibility': renderReproTable(run, content, summary);         break;
+    }
+  }
+
+  // Generation
+  function renderGenerationTable(run, content, summary) {
+    const rows = run.results || [];
+    const successCount = rows.filter(r => r.result === true).length;
+    summary.innerHTML = `<strong>${successCount} / ${rows.length}</strong> successful · click a row to view`;
+
+    if (!rows.length) {
+      content.innerHTML = `<div class="empty-state"><p>No generation results in this run.</p></div>`;
+      return;
+    }
+
+    content.innerHTML = `
+      <div class="rtable-wrap">
+        <table class="rtable">
+          <thead><tr>
+            <th style="width:90px">Bug ID</th>
+            <th style="width:120px">Repo</th>
+            <th>Description</th>
+            <th style="width:120px">Result</th>
+            <th>Explanation</th>
+          </tr></thead>
+          <tbody>
+            ${rows.map(r => {
+              const bug = bugs.find(b => b.bug_id === r.bug_id);
+              const resultBadge = r.result === true
+                ? '<span class="badge badge-match">✓ Correct</span>'
+                : '<span class="badge badge-miss">✗ Incorrect</span>';
+              return `<tr class="rrow" data-run-bug="${esc(r.bug_id)}" data-run-id="${esc(run.run_id)}">
+                <td><span class="cell-id-text">${esc(r.bug_id)}</span></td>
+                <td><span class="cell-repo-text">${esc(bug?.source_repo || '')}</span></td>
+                <td><div class="rtext">${esc(bug?.description || '—')}</div></td>
+                <td>${resultBadge}</td>
+                <td><div class="rtext">${esc(r.explanation || '—')}</div></td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>`;
+
+    content.querySelectorAll('tr.rrow').forEach(row =>
+      row.addEventListener('click', () => showGenCmpPopup(row.dataset.runBug, row.dataset.runId))
+    );
+  }
+
+  // Validity
+  function renderValidityTable(run, content, summary) {
+    const rows = run.results || [];
+    const correct = rows.filter(r => {
+      const bug = bugs.find(b => b.bug_id === r.bug_id);
+      return bug && r.predicted_valid === bug.is_valid_bug;
+    }).length;
+    const pct = rows.length ? Math.round(correct / rows.length * 100) : 0;
+    summary.innerHTML = `${correct} / ${rows.length} correct · <strong>${pct}%</strong> accuracy`;
+
+    content.innerHTML = `
+      <div class="rtable-wrap">
+        <table class="rtable">
+          <thead><tr>
+            <th style="width:90px">Bug ID</th>
+            <th style="width:150px">Repo</th>
+            <th style="width:120px">Validity</th>
+            <th style="width:120px">Result</th>
+          </tr></thead>
+          <tbody>
+            ${rows.map(r => {
+              const bug  = bugs.find(b => b.bug_id === r.bug_id);
+              const match = bug && r.predicted_valid === bug.is_valid_bug;
+              const resultBadge = match
+                ? '<span class="badge badge-match">✓ Correct</span>'
+                : '<span class="badge badge-miss">✗ Incorrect</span>';
+              return `<tr>
+                <td><span class="cell-id-text">${esc(r.bug_id)}</span></td>
+                <td><span class="cell-repo-text">${esc(bug?.source_repo || '')}</span></td>
+                <td>${badgeValid(bug?.is_valid_bug)}</td>
+                <td>${resultBadge}</td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>`;
+  }
+
+  // Fix Suggestion
+  function renderFixTable(run, content, summary) {
+    const rows = run.results || [];
+    const successCount = rows.filter(r => r.result === true).length;
+    summary.innerHTML = `<strong>${successCount} / ${rows.length}</strong> successful · click a row to view`;
+
+    content.innerHTML = `
+      <div class="rtable-wrap">
+        <table class="rtable">
+          <thead><tr>
+            <th style="width:90px">Bug ID</th>
+            <th>Description</th>
+            <th>Ground Truth Fix</th>
+            <th>Generated Fix</th>
+            <th style="width:120px">Result</th>
+            <th>Explanation</th>
+          </tr></thead>
+          <tbody>
+            ${rows.map(r => {
+              const bug = bugs.find(b => b.bug_id === r.bug_id);
+              const resultBadge = r.result === true
+                ? '<span class="badge badge-match">✓ Correct</span>'
+                : '<span class="badge badge-miss">✗ Incorrect</span>';
+              return `<tr class="rrow" data-run-bug="${esc(r.bug_id)}" data-run-id="${esc(run.run_id)}">
+                <td><span class="cell-id-text">${esc(r.bug_id)}</span></td>
+                <td><div class="rtext">${esc(bug?.description || '—')}</div></td>
+                <td><div class="rtext">${esc(bug?.fix_suggestion || '—')}</div></td>
+                <td><div class="rtext">${esc(r.generated_fix || '—')}</div></td>
+                <td>${resultBadge}</td>
+                <td><div class="rtext">${esc(r.explanation || '—')}</div></td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>`;
+
+    content.querySelectorAll('tr.rrow').forEach(row =>
+      row.addEventListener('click', () => showFixPopup(row.dataset.runBug, row.dataset.runId))
+    );
+  }
+
+  // Duplicates
+  function renderDupResultTable(run, content, summary) {
+    const rows = run.results || [];
+    summary.innerHTML = `${rows.length} result${rows.length !== 1 ? 's' : ''}`;
+
+    content.innerHTML = `
+      <div class="rtable-wrap">
+        <table class="rtable">
+          <thead><tr>
+            <th style="width:90px">Bug ID</th>
+            <th>Ground Truth Refs</th>
+            <th>Detected Refs</th>
+            <th style="width:90px">Match</th>
+          </tr></thead>
+          <tbody>
+            ${rows.map(r => {
+              const bug  = bugs.find(b => b.bug_id === r.bug_id);
+              const gt   = bug?.duplicate_refs || [];
+              const det  = r.detected_refs || [];
+              const match = gt.length === det.length && gt.every(u => det.includes(u));
+              return `<tr>
+                <td><span class="cell-id-text">${esc(r.bug_id)}</span></td>
+                <td>${dupCell(gt)}</td>
+                <td>${dupCell(det)}</td>
+                <td>${matchBadge(match)}</td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>`;
+  }
+
+  // Reproducibility
+  function renderReproTable(run, content, summary) {
+    const rows = run.results || [];
+    const correct = rows.filter(r => {
+      const bug = bugs.find(b => b.bug_id === r.bug_id);
+      return bug && r.predicted_reproducible === bug.is_reproducible;
+    }).length;
+    const pct = rows.length ? Math.round(correct / rows.length * 100) : 0;
+    summary.innerHTML = `${correct} / ${rows.length} correct · <strong>${pct}%</strong> accuracy · click a row to view`;
+
+    content.innerHTML = `
+      <div class="rtable-wrap">
+        <table class="rtable">
+          <thead><tr>
+            <th style="width:90px">Bug ID</th>
+            <th style="width:120px">Repo</th>
+            <th>Agent Output</th>
+            <th style="width:120px">Result</th>
+            <th>Explanation</th>
+          </tr></thead>
+          <tbody>
+            ${rows.map(r => {
+              const bug  = bugs.find(b => b.bug_id === r.bug_id);
+              const match = bug && r.predicted_reproducible === bug.is_reproducible;
+              const resultBadge = match
+                ? '<span class="badge badge-match">✓ Correct</span>'
+                : '<span class="badge badge-miss">✗ Incorrect</span>';
+              return `<tr class="rrow" data-run-bug="${esc(r.bug_id)}" data-run-id="${esc(run.run_id)}">
+                <td><span class="cell-id-text">${esc(r.bug_id)}</span></td>
+                <td><span class="cell-repo-text">${esc(bug?.source_repo || '')}</span></td>
+                <td><div class="rtext">${esc(r.agent_output || '—')}</div></td>
+                <td>${resultBadge}</td>
+                <td><div class="rtext">${esc(r.explanation || '—')}</div></td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>`;
+
+    content.querySelectorAll('tr.rrow').forEach(row =>
+      row.addEventListener('click', () => showReproPopup(row.dataset.runBug, row.dataset.runId))
+    );
+  }
+
+  function renderFieldList(source, fields) {
+    const labels = {
+      title: 'Title', description: 'Description',
+      observed_behavior: 'Observed Behavior', expected_behavior: 'Expected Behavior',
+      s2r: 'Steps to Reproduce',
+    };
+    return fields.map(key => `
+      <div class="orig-field">
+        <div class="orig-field-label">${labels[key] || key}</div>
+        <div class="orig-field-val ${!source[key] ? 'empty' : ''}">${esc(source[key] || 'Not provided')}</div>
+      </div>`).join('');
+  }
+
+  // ── Task sub-tabs ──────────────────────────────────────
+  document.querySelectorAll('.task-tab-btn').forEach(btn =>
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.task-tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeTask = btn.dataset.task;
+      renderResultsTab();
+    })
+  );
+
+  document.getElementById('run-select').addEventListener('change', renderResultsContent);
+
+  // ── Main tabs ──────────────────────────────────────────
+  document.querySelectorAll('.tab-btn').forEach(btn =>
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      ['dataset', 'results'].forEach(t =>
+        document.getElementById(`tab-${t}`).classList.toggle('hidden', t !== btn.dataset.tab)
+      );
+    })
+  );
 
   function esc(str) {
     if (!str) return '';
