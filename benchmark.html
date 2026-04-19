@@ -6,6 +6,7 @@
   <title>BugScribe Benchmark</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -96,6 +97,33 @@
       letter-spacing: 0.05em;
       text-transform: uppercase;
     }
+
+    .btn-download {
+      display: flex; align-items: center; gap: 7px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: var(--radius);
+      color: rgba(255,255,255,0.85);
+      font-family: inherit;
+      font-size: 12px; font-weight: 600;
+      padding: 7px 14px;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+
+    .btn-download:hover {
+      background: rgba(255,255,255,0.18);
+      border-color: rgba(255,255,255,0.32);
+      color: white;
+    }
+
+    .btn-download:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-download svg { flex-shrink: 0; }
 
     /* ── Tabs ───────────────────────────────────────── */
     .tabs-bar {
@@ -989,6 +1017,12 @@
       <div class="header-sub">Benchmark Dataset</div>
     </div>
   </div>
+  <button class="btn-download" id="btn-download-requests" title="Download all cURL requests as a ZIP">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+    </svg>
+    Download Dataset
+  </button>
 </header>
 
 <!-- Tabs -->
@@ -1969,6 +2003,45 @@
       .replace(/&/g, '&amp;').replace(/</g, '&lt;')
       .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
+
+  // ── cURL requests download ─────────────────────────────
+  const CURL_FILES = [
+    'BUG-001-request.txt','BUG-002-request.txt','BUG-003-request.txt',
+    'BUG-004-request.txt','BUG-005-request.txt','BUG-006-request.txt',
+    'BUG-007-request.txt','BUG-009-request.txt','BUG-010-request.txt',
+    'BUG-011-request.txt','BUG-012-request.txt','BUG-013-request.txt',
+    'BUG-014-request.txt','BUG-015-request.txt','BUG-016-request.txt',
+  ];
+
+  document.getElementById('btn-download-requests').addEventListener('click', async function () {
+    this.disabled = true;
+    this.innerHTML = `
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+      </svg>
+      Preparing…`;
+    try {
+      const zip    = new JSZip();
+      const folder = zip.folder('bugscribe-curl-requests');
+      await Promise.all(CURL_FILES.map(async name => {
+        const res  = await fetch(`./bugscribe-curl-requests/${name}`);
+        const text = await res.text();
+        folder.file(name, text);
+      }));
+      const blob = await zip.generateAsync({ type: 'blob' });
+      const url  = URL.createObjectURL(blob);
+      const a    = Object.assign(document.createElement('a'), { href: url, download: 'bugscribe-curl-requests.zip' });
+      a.click();
+      URL.revokeObjectURL(url);
+    } finally {
+      this.disabled = false;
+      this.innerHTML = `
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Download Dataset`;
+    }
+  });
 
   init();
 </script>
