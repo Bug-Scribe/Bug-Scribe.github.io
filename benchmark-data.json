@@ -239,6 +239,22 @@
       "fix_suggestion": null,
       "duplicate_refs": [],
       "is_reproducible": true
+    },
+    {
+      "bug_id": "BUG-017",
+      "source_repo": "flypgs.com",
+      "description": "Searching for a flight from Aalborg to Almati returns a generic temporary listing error message instead of available flights or a valid 'no flights found' routing message.",
+      "title": "Flight Search: Aalborg to Almati returns 'temporarily cannot be listed' error",
+      "observed_behavior": "After filling in the flight search parameters (Aalborg to Almati) and submitting the search, the system fails to display flights and instead shows the error message: 'Üzgünüz, aradığınız uçuşlar geçici olarak listelenemiyor. Lütfen daha sonra tekrar deneyiniz.'",
+      "expected_behavior": "The system should successfully query the flight database and either display available flights for the selected route and dates, or display a standard, informative message indicating that no flights are scheduled for this specific route/date combination.",
+      "s2r": "1. Navigate to https://www.flypgs.com/.\n2. Select 'Aalborg' as the departure location.\n3. Select 'Almati' as the arrival location.\n4. Select '25 June' as the departure date.\n5. Select any future date for the return/arrival date.\n6. Click on the 'Search Cheap Flights' button.\n7. Observe the error message displayed on the screen.",
+      "edit_request": null,
+      "edited_report": null,
+      "is_valid_bug": true,
+      "fix_suggestion": null,
+      "duplicate_refs": [],
+      "is_reproducible": true
     }
+
   ]
 }
