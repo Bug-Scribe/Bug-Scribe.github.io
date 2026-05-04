@@ -1268,3 +1268,30 @@ h2 {
     font-weight: 400 !important;
     letter-spacing: -0.04em !important;
 }
+
+/* Readability pass for larger, airier main copy */
+p,
+.about-text p,
+.features-list li,
+.benefit-card li,
+.references-intro,
+.research-owner-note p,
+.ref-meta,
+.info-value,
+.speed-intro {
+    font-size: clamp(1.08rem, 1.55vw, 1.32rem) !important;
+    line-height: 1.88 !important;
+    letter-spacing: 0.006em !important;
+}
+
+.about-text {
+    font-size: clamp(1.1rem, 1.6vw, 1.34rem) !important;
+}
+
+.nav-menu li a,
+.metric-label,
+.member-id,
+.ref-tag,
+.research-owner-label {
+    letter-spacing: 0.015em !important;
+}
