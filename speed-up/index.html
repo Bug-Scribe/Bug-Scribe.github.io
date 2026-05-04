@@ -9,13 +9,15 @@
     <link rel="stylesheet" type="text/css" href="/styles.css">
 </head>
 <body>
-    <nav>
-        <div class="container">
-            <ul>
+    <nav class="site-nav">
+        <div class="container nav-inner">
+            <a class="nav-brand" href="/about/">BugScribe</a>
+            <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-menu">Menu</button>
+            <ul class="nav-menu" id="primary-menu">
                 <li><a href="/about/">About</a></li>
                 <li><a href="/speed-up/" class="active">Speed Up Bug Reporting</a></li>
                 <li><a href="/research/">ROI Microsite</a></li>
-                <li><a href="/references/">References</a></li>
+                <li><a href="/references/">Our Research</a></li>
                 <li><a href="/team/">Team</a></li>
                 <li><a href="/supervisor/">Supervisor</a></li>
                 <li><a href="/project-info/">Project Info</a></li>
@@ -96,5 +98,25 @@
             <p>CS-491 Senior Design Project</p>
         </div>
     </footer>
+    <script>
+        const navToggle = document.querySelector('.nav-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+
+        if (navToggle && navMenu) {
+            navToggle.addEventListener('click', () => {
+                const isOpen = navMenu.classList.toggle('is-open');
+                navToggle.setAttribute('aria-expanded', String(isOpen));
+                navToggle.textContent = isOpen ? 'Close' : 'Menu';
+            });
+
+            navMenu.querySelectorAll('a').forEach((link) => {
+                link.addEventListener('click', () => {
+                    navMenu.classList.remove('is-open');
+                    navToggle.setAttribute('aria-expanded', 'false');
+                    navToggle.textContent = 'Menu';
+                });
+            });
+        }
+    </script>
 </body>
 </html>
