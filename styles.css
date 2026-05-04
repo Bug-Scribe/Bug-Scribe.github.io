@@ -898,3 +898,229 @@ footer {
         font-size: 1.22rem;
     }
 }
+
+/* Canvas-aligned visual system */
+:root {
+    --lp-bg-base: #171b2f;
+    --lp-bg-raised: #222840;
+    --lp-bg-surface: #30364f;
+    --lp-line: rgba(129, 140, 178, 0.28);
+    --lp-ink: #f7f8ff;
+    --lp-ink-muted: #aeb8d3;
+    --lp-brand: #7c5cff;
+    --lp-brand-soft: #a68bff;
+    --lp-sun-pink: #ff6f91;
+    --lp-sun-orange: #ff9d4d;
+    --lp-sun-gold: #f7d86b;
+    --lp-sunset: linear-gradient(90deg, var(--lp-sun-pink) 0%, var(--lp-sun-orange) 50%, var(--lp-sun-gold) 100%);
+    --lp-paper: #fbf7ed;
+    --lp-paper-alt: #f3eddc;
+    --lp-paper-line: rgba(71, 57, 31, 0.12);
+    --lp-shadow: 0 24px 70px rgba(5, 8, 18, 0.42);
+}
+
+body {
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: var(--lp-ink);
+    background:
+        radial-gradient(circle at 20% 0%, rgba(124, 92, 255, 0.24), transparent 34rem),
+        radial-gradient(circle at 78% 14%, rgba(255, 157, 77, 0.18), transparent 30rem),
+        linear-gradient(180deg, #171b2f 0%, #111527 48%, #0e1220 100%);
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.42;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    background-size: 42px 42px;
+    mask-image: linear-gradient(to bottom, black, transparent 78%);
+}
+
+.site-nav {
+    background: rgba(23, 27, 47, 0.82);
+    border-bottom: 1px solid var(--lp-line);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05) inset;
+}
+
+.nav-brand {
+    color: var(--lp-ink);
+}
+
+.nav-brand::before {
+    content: "";
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+    border-radius: 8px;
+    background: var(--lp-sunset);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 12px 28px rgba(124, 92, 255, 0.22);
+}
+
+.nav-toggle {
+    border-color: rgba(124, 92, 255, 0.36);
+    border-radius: 999px;
+    background: rgba(34, 40, 64, 0.74);
+    color: var(--lp-ink);
+}
+
+.nav-toggle:hover,
+.nav-toggle[aria-expanded="true"] {
+    background: rgba(124, 92, 255, 0.2);
+    border-color: rgba(166, 139, 255, 0.65);
+}
+
+.nav-menu {
+    gap: 10px;
+    padding: 14px 0;
+}
+
+.nav-menu li {
+    margin: 0;
+}
+
+.nav-menu li a {
+    color: var(--lp-ink-muted);
+    font-size: 0.92rem;
+    padding: 10px 15px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+}
+
+.nav-menu li a::before {
+    display: none;
+}
+
+.nav-menu li a:hover,
+.nav-menu li a.active {
+    color: var(--lp-ink);
+    background: rgba(34, 40, 64, 0.72);
+    border-color: var(--lp-line);
+}
+
+main {
+    padding: 72px 0 96px;
+}
+
+section {
+    position: relative;
+}
+
+h2 {
+    color: var(--lp-ink);
+    font-size: clamp(2.25rem, 5vw, 4.4rem);
+    font-weight: 750;
+    letter-spacing: -0.045em;
+}
+
+h2::after {
+    width: 88px;
+    height: 4px;
+    background: var(--lp-sunset);
+}
+
+h3 {
+    color: var(--lp-ink);
+    letter-spacing: -0.025em;
+}
+
+p,
+.speed-intro,
+.metric-label,
+.benefit-card li,
+.info-value,
+.references-intro,
+.research-owner-note p,
+.ref-meta {
+    color: var(--lp-ink-muted);
+}
+
+.about-text,
+.features-list,
+.metric,
+.benefit-card,
+.team-member,
+.supervisor-card,
+.project-info,
+.info-item,
+.link-card,
+.research-owner-note,
+.reference-card,
+.pronunciation {
+    border-color: var(--lp-line);
+    background:
+        radial-gradient(circle at 100% 0%, rgba(124, 92, 255, 0.14), transparent 30%),
+        rgba(34, 40, 64, 0.72);
+    box-shadow: var(--lp-shadow);
+    backdrop-filter: blur(18px);
+}
+
+.features-list li,
+.benefit-card li strong,
+.member-name,
+.supervisor-name,
+.info-label,
+.link-card h3,
+.ref-title a,
+.ref-authors,
+.ref-venue-name {
+    color: var(--lp-ink);
+}
+
+.features-list li:before,
+.metric-value,
+.benefit-card h3 i,
+.supervisor-title,
+.link-card a,
+.pronunciation strong {
+    color: var(--lp-brand-soft);
+}
+
+.features-list li:before,
+.member-links a[aria-label*="LinkedIn"],
+.supervisor-links a[aria-label*="LinkedIn"],
+.research-owner-label,
+.ref-tag {
+    background: rgba(124, 92, 255, 0.14);
+    border-color: rgba(124, 92, 255, 0.36);
+    color: var(--lp-brand-soft);
+}
+
+.team-member::before,
+.supervisor-card::before,
+.link-card::before,
+.reference-card::before {
+    background: var(--lp-sunset);
+}
+
+.team-member:hover,
+.supervisor-card:hover,
+.link-card:hover,
+.reference-card:hover {
+    border-color: rgba(166, 139, 255, 0.62);
+    box-shadow: 0 30px 86px rgba(124, 92, 255, 0.18);
+}
+
+.team-photo-card {
+    border-color: var(--lp-line);
+    background: rgba(34, 40, 64, 0.72);
+    box-shadow: var(--lp-shadow);
+}
+
+footer {
+    background: rgba(14, 18, 32, 0.94);
+    border-top: 1px solid var(--lp-line);
+    color: var(--lp-ink-muted);
+}
+
+@media (max-width: 768px) {
+    .nav-menu {
+        border-color: var(--lp-line);
+        background: rgba(23, 27, 47, 0.98);
+    }
+}
