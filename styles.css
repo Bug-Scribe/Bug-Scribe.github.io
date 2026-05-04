@@ -1390,3 +1390,18 @@ p,
 }
 
 /* deploy retry: logo icon */
+
+/* Report resource CTAs */
+.resource-button,
+.resource-button:visited,
+.link-card a.resource-button,
+.link-card a.resource-button:visited {
+    color: #ffffff !important;
+}
+
+.resource-button:hover,
+.resource-button:focus-visible,
+.link-card a.resource-button:hover,
+.link-card a.resource-button:focus-visible {
+    color: #ffffff !important;
+}
