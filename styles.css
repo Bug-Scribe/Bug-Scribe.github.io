@@ -1124,3 +1124,128 @@ footer {
         background: rgba(23, 27, 47, 0.98);
     }
 }
+
+/* Strong Canvas landing parity pass */
+body {
+    color: var(--lp-ink) !important;
+    background:
+        radial-gradient(circle at 18% -8%, rgba(124, 92, 255, 0.34), transparent 34rem),
+        radial-gradient(circle at 84% 10%, rgba(255, 157, 77, 0.24), transparent 30rem),
+        radial-gradient(circle at 50% 96%, rgba(255, 111, 145, 0.11), transparent 38rem),
+        linear-gradient(180deg, #171b2f 0%, #12172a 48%, #0f1424 100%) !important;
+}
+
+.container {
+    max-width: 1200px;
+}
+
+.site-nav {
+    background: rgba(23, 27, 47, 0.86) !important;
+    border-bottom: 1px solid var(--lp-line) !important;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06) inset !important;
+}
+
+.nav-inner {
+    min-height: 64px;
+}
+
+.nav-brand {
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.03em !important;
+}
+
+.nav-menu li a {
+    color: var(--lp-ink-muted) !important;
+}
+
+.nav-menu li a:hover,
+.nav-menu li a.active {
+    color: var(--lp-ink) !important;
+    background: rgba(34, 40, 64, 0.78) !important;
+    border-color: var(--lp-line) !important;
+}
+
+.nav-toggle {
+    border-color: rgba(124, 92, 255, 0.42) !important;
+    background: rgba(34, 40, 64, 0.76) !important;
+    box-shadow: 0 10px 30px rgba(5, 8, 18, 0.28) !important;
+}
+
+main {
+    padding-top: 86px !important;
+}
+
+h2 {
+    color: var(--lp-ink) !important;
+    text-shadow: 0 18px 70px rgba(124, 92, 255, 0.18);
+}
+
+h2::after {
+    background: var(--lp-sunset) !important;
+}
+
+.pronunciation {
+    color: var(--lp-ink) !important;
+    border-color: rgba(166, 139, 255, 0.42) !important;
+    background:
+        radial-gradient(circle at 100% 0%, rgba(255, 157, 77, 0.12), transparent 34%),
+        rgba(34, 40, 64, 0.82) !important;
+}
+
+.pronunciation strong {
+    color: var(--lp-brand-soft) !important;
+}
+
+.about-text,
+.features-list,
+.metric,
+.benefit-card,
+.team-member,
+.supervisor-card,
+.project-info,
+.info-item,
+.link-card,
+.research-owner-note,
+.reference-card,
+.team-photo-card {
+    border-color: var(--lp-line) !important;
+    background:
+        radial-gradient(circle at 0% 0%, rgba(124, 92, 255, 0.16), transparent 34%),
+        linear-gradient(135deg, rgba(34, 40, 64, 0.92), rgba(20, 25, 43, 0.9)) !important;
+}
+
+.about-text p,
+.features-list li,
+.benefit-card li,
+.references-intro,
+.research-owner-note p,
+.ref-meta,
+.info-value,
+p {
+    color: var(--lp-ink-muted) !important;
+}
+
+.features-list li:before,
+.metric-value,
+.benefit-card h3 i,
+.supervisor-title,
+.link-card a,
+.ref-title a:hover {
+    color: var(--lp-brand-soft) !important;
+}
+
+.member-links a[aria-label*="LinkedIn"],
+.supervisor-links a[aria-label*="LinkedIn"],
+.research-owner-label,
+.ref-tag {
+    color: var(--lp-brand-soft) !important;
+    border-color: rgba(124, 92, 255, 0.42) !important;
+    background: rgba(124, 92, 255, 0.14) !important;
+}
+
+.member-links a[aria-label*="GitHub"],
+.supervisor-links a[aria-label*="Website"] {
+    color: var(--lp-ink) !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+}
