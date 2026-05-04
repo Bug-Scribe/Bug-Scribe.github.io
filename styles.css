@@ -1267,7 +1267,7 @@ p {
     margin-right: 0 !important;
     border-radius: 10px !important;
     background:
-        url("/assets/bugscribe-dark-logo.svg") center / cover no-repeat,
+        url("/assets/bugscribe-logo-icon.png") center / cover no-repeat,
         var(--lp-bg-raised) !important;
 }
 
