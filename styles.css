@@ -1252,6 +1252,35 @@ p {
     background: rgba(255, 255, 255, 0.08) !important;
 }
 
+/* Shared BugScribe SVG logo */
+.nav-brand {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+}
+
+.nav-brand::before {
+    display: inline-block !important;
+    flex: 0 0 auto !important;
+    width: 34px !important;
+    height: 34px !important;
+    margin-right: 0 !important;
+    border-radius: 10px !important;
+    background:
+        url("/assets/bugscribe-dark-logo.svg") center / cover no-repeat,
+        var(--lp-bg-raised) !important;
+}
+
+.nav-inner {
+    justify-content: space-between !important;
+    gap: 24px !important;
+}
+
+.nav-menu {
+    flex: 1 1 auto !important;
+    justify-content: flex-end !important;
+}
+
 /* Canvas PR #17 display font */
 h1,
 h2,

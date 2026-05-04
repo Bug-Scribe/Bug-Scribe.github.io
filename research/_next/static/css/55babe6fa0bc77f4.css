@@ -8,3 +8,5 @@
 /* Canvas PR #17 display font */.font-heading,h1,h2,h3,.section-header h1,.section-header h2{font-family:"Instrument Serif",Georgia,"Times New Roman",serif!important;font-weight:400!important;letter-spacing:-.04em!important}.stat-number{font-family:"Instrument Serif",Georgia,"Times New Roman",serif!important}
 
 /* Readability pass for larger, airier copy */p,.section-header p,.norse-input-card p,.viking-card p,.viking-summary-card p,label,.text-sm{line-height:1.78!important;letter-spacing:.006em!important}.section-header p,.viking-card p,.norse-input-card p{font-size:clamp(1rem,1.25vw,1.15rem)!important}.text-xs{line-height:1.65!important;letter-spacing:.012em!important}
+
+/* Shared BugScribe SVG logo */header a[href="/research/"] span:first-child{display:inline-block!important;width:34px!important;height:34px!important;border-radius:10px!important;background:url("/assets/bugscribe-dark-logo.svg") center/cover no-repeat,var(--bg-2)!important;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 12px 28px rgba(124,92,255,.22)!important;color:transparent!important;overflow:hidden!important}
