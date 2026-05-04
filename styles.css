@@ -1281,6 +1281,22 @@ p {
     justify-content: flex-end !important;
 }
 
+.about-logo-showcase {
+    display: flex;
+    justify-content: center;
+    margin: -12px auto 38px;
+}
+
+.about-logo-showcase img {
+    width: clamp(132px, 18vw, 220px);
+    height: auto;
+    border-radius: 30px;
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.08),
+        0 28px 80px rgba(5, 8, 18, 0.42),
+        0 0 54px rgba(124, 92, 255, 0.28);
+}
+
 /* Canvas PR #17 display font */
 h1,
 h2,
