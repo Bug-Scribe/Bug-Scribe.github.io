@@ -582,6 +582,39 @@ footer {
     line-height: 1.7;
 }
 
+.research-owner-note {
+    max-width: 900px;
+    margin: 0 auto 42px;
+    padding: 24px 28px;
+    border: 1px solid rgba(126, 164, 245, 0.28);
+    border-radius: 20px;
+    background:
+        radial-gradient(circle at 100% 0%, rgba(131, 58, 180, 0.22), transparent 34%),
+        rgba(26, 26, 26, 0.9);
+    text-align: center;
+}
+
+.research-owner-note p {
+    margin: 10px auto 0;
+    max-width: 720px;
+    color: #b3c5df;
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+.research-owner-label {
+    display: inline-flex;
+    border: 1px solid rgba(64, 93, 230, 0.45);
+    border-radius: 999px;
+    background: rgba(64, 93, 230, 0.14);
+    color: #a8c7ff;
+    padding: 7px 13px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
 .references-list {
     display: grid;
     gap: 24px;
