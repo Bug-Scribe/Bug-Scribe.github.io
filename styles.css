@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap");
+
 * {
     margin: 0;
     padding: 0;
@@ -1248,4 +1250,21 @@ p {
 .supervisor-links a[aria-label*="Website"] {
     color: var(--lp-ink) !important;
     background: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Canvas PR #17 display font */
+h1,
+h2,
+h3,
+.nav-brand,
+.member-name,
+.supervisor-name,
+.ref-title,
+.metric-value {
+    font-family: "Instrument Serif", Georgia, "Times New Roman", serif !important;
+}
+
+h2 {
+    font-weight: 400 !important;
+    letter-spacing: -0.04em !important;
 }
