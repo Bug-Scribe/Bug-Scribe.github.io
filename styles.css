@@ -358,6 +358,7 @@ p {
 
 .team-photo-card {
     overflow: hidden;
+    aspect-ratio: 5 / 4;
     border: 1px solid rgba(64, 93, 230, 0.28);
     border-radius: 22px;
     background: rgba(26, 26, 26, 0.9);
@@ -367,8 +368,9 @@ p {
 .team-photo-card img {
     display: block;
     width: 100%;
-    height: clamp(260px, 42vw, 420px);
+    height: 100%;
     object-fit: cover;
+    object-position: center;
 }
 
 .team-member {
@@ -890,10 +892,6 @@ footer {
     .team-photo-grid {
         gap: 18px;
         margin-top: 44px;
-    }
-
-    .team-photo-card img {
-        height: 260px;
     }
 
     .ref-title {
