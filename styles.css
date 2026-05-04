@@ -834,7 +834,7 @@ footer {
         top: 64px;
         left: 22px;
         right: 22px;
-        display: none;
+        display: none !important;
         flex-direction: column;
         align-items: stretch;
         gap: 6px;
@@ -846,7 +846,7 @@ footer {
     }
 
     .nav-menu.is-open {
-        display: flex;
+        display: flex !important;
     }
 
     .nav-menu li {
