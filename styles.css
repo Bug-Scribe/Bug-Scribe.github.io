@@ -460,6 +460,14 @@ p {
 }
 
 /* Supervisor Section */
+.supervisor-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 450px));
+    justify-content: center;
+    gap: 28px;
+    margin: 60px auto 0;
+}
+
 .supervisor-card {
     background: rgba(26, 26, 26, 0.9);
     padding: 50px;
@@ -467,7 +475,8 @@ p {
     border: 1px solid #3c3c3c;
     text-align: center;
     max-width: 450px;
-    margin: 60px auto 0;
+    width: 100%;
+    margin: 0 auto;
     position: relative;
     overflow: hidden;
 }
@@ -493,6 +502,14 @@ p {
     font-size: 1.2rem;
     color: #405de6;
     font-weight: 400;
+}
+
+.mentor-bio {
+    margin: 16px auto 0;
+    max-width: 340px;
+    color: #b9c4d6;
+    font-size: 1rem !important;
+    line-height: 1.7 !important;
 }
 
 .supervisor-links {
@@ -787,6 +804,10 @@ p {
 }
 
 @media (max-width: 900px) {
+    .supervisor-grid {
+        grid-template-columns: minmax(0, 450px);
+    }
+
     .videos-grid {
         grid-template-columns: 1fr;
     }
