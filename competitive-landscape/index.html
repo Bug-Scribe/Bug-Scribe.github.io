@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparison with Other Products | BugScribe</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/styles.css?v=competitive-landscape-20260507">
+</head>
+<body>
+    <nav class="site-nav">
+        <div class="container nav-inner">
+            <a class="nav-brand" href="/about/">BugScribe</a>
+            <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-menu" aria-label="Open navigation menu">
+                <svg class="nav-menu-icon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false">
+                    <path d="M4 6h16M4 12h16M4 18h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="sr-only nav-toggle-text">Open navigation menu</span>
+            </button>
+            <ul class="nav-menu" id="primary-menu">
+                <li><a href="/about/">About</a></li>
+                <li><a href="/speed-up/">Speed Up Bug Reporting</a></li>
+                <li><a href="/research/">ROI Microsite</a></li>
+                <li><a href="/references/">Our Research</a></li>
+                <li><a href="/team/">Team</a></li>
+                <li><a href="/supervisor/">Supervisor</a></li>
+                <li><a href="/project-info/">Project Info</a></li>
+                <li><a href="/competitive-landscape/" class="active">Product Comparison</a></li>
+                <li><a href="/links/">Links</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <section id="competitive-landscape" class="competitive-landscape-section competitive-landscape-page">
+                <h2>Comparison with Other Products</h2>
+                <p class="landscape-intro">This section compares BugScribe with other products that support bug capture, visual feedback, QA workflows, and issue handoff.</p>
+                <p class="landscape-note">This page focuses on what each product does for bug-report creation: how much diagnostic context it captures, whether it helps form a structured report, whether it supports steps to reproduce, and whether it improves report quality before submission.</p>
+
+                <div class="landscape-section-heading">
+                    <span>Closest alternatives</span>
+                    <h3>The products most similar to BugScribe are rich browser bug-capture tools.</h3>
+                </div>
+
+                <div class="closest-grid" aria-label="Closest BugScribe alternatives">
+                    <article class="closest-card">
+                        <h4>Jam</h4>
+                        <p><strong>Strong at:</strong> fast browser capture with screenshots, recordings, console logs, network data, and tracker integrations.</p>
+                        <p><strong>BugScribe advantage:</strong> adds a report-quality agent layer for validation, clarification, and duplicate-aware submission.</p>
+                    </article>
+                    <article class="closest-card">
+                        <h4>BetterBugs</h4>
+                        <p><strong>Strong at:</strong> visual bug reports with technical context, recordings, logs, repro steps, and AI debugging support.</p>
+                        <p><strong>BugScribe advantage:</strong> focuses more directly on structured S2R generation and pre-submission report acceptance quality.</p>
+                    </article>
+                    <article class="closest-card">
+                        <h4>Marker.io</h4>
+                        <p><strong>Strong at:</strong> website and UAT bug reporting with screenshots, metadata, logs, replay links, and tracker handoff.</p>
+                        <p><strong>BugScribe advantage:</strong> moves beyond capture into AI-guided completion, validation, and duplicate-aware tracker handoff.</p>
+                    </article>
+                    <article class="closest-card">
+                        <h4>Bird Eats Bug</h4>
+                        <p><strong>Strong at:</strong> screen recording with automatic console, network, system, and browser context.</p>
+                        <p><strong>BugScribe advantage:</strong> turns captured evidence into a complete report instead of mainly packaging the evidence.</p>
+                    </article>
+                </div>
+
+                <div class="landscape-section-heading">
+                    <span>Capability matrix</span>
+                    <h3>BugScribe competes less on capture alone and more on report quality before submission.</h3>
+                </div>
+
+                <div class="capability-table-wrap">
+                    <table class="capability-table">
+                        <thead>
+                            <tr>
+                                <th>Tool</th>
+                                <th>Primary category</th>
+                                <th>Auto context</th>
+                                <th>Structured report</th>
+                                <th>S2R</th>
+                                <th>Clarification</th>
+                                <th>Validity</th>
+                                <th>Duplicates</th>
+                                <th>BugScribe advantage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>BugScribe</th>
+                                <td>AI report creation</td>
+                                <td>Yes</td>
+                                <td>Yes</td>
+                                <td>Yes</td>
+                                <td>Yes</td>
+                                <td>Yes</td>
+                                <td>Yes</td>
+                                <td>Combines capture, report writing, validation, clarification, and duplicate-aware handoff.</td>
+                            </tr>
+                            <tr>
+                                <th>Jam</th>
+                                <td>Browser bug capture</td>
+                                <td>Yes</td>
+                                <td>Partial</td>
+                                <td>Partial</td>
+                                <td>Limited</td>
+                                <td>Not clear</td>
+                                <td>Not clear</td>
+                                <td>BugScribe adds pre-submission quality gates and duplicate-aware submission.</td>
+                            </tr>
+                            <tr>
+                                <th>BetterBugs</th>
+                                <td>Visual bug capture</td>
+                                <td>Yes</td>
+                                <td>Partial</td>
+                                <td>Partial</td>
+                                <td>Limited</td>
+                                <td>Not clear</td>
+                                <td>Not clear</td>
+                                <td>BugScribe is more focused on complete report generation and acceptance readiness.</td>
+                            </tr>
+                            <tr>
+                                <th>Marker.io</th>
+                                <td>Website/UAT reporting</td>
+                                <td>Yes</td>
+                                <td>Partial</td>
+                                <td>Limited</td>
+                                <td>No</td>
+                                <td>Not clear</td>
+                                <td>Not clear</td>
+                                <td>BugScribe adds AI-guided completion and report-quality checks.</td>
+                            </tr>
+                            <tr>
+                                <th>Bird Eats Bug</th>
+                                <td>Bug evidence capture</td>
+                                <td>Yes</td>
+                                <td>Partial</td>
+                                <td>Partial</td>
+                                <td>No</td>
+                                <td>Not clear</td>
+                                <td>Not clear</td>
+                                <td>BugScribe turns evidence into a validated, structured tracker-ready report.</td>
+                            </tr>
+                            <tr>
+                                <th>Usersnap</th>
+                                <td>User feedback</td>
+                                <td>Partial</td>
+                                <td>Partial</td>
+                                <td>Limited</td>
+                                <td>No</td>
+                                <td>Not clear</td>
+                                <td>Not clear</td>
+                                <td>BugScribe is more developer-report oriented than feedback-workflow oriented.</td>
+                            </tr>
+                            <tr>
+                                <th>BugHerd</th>
+                                <td>Visual feedback/tasking</td>
+                                <td>Partial</td>
+                                <td>Limited</td>
+                                <td>Limited</td>
+                                <td>No</td>
+                                <td>Not clear</td>
+                                <td>Not clear</td>
+                                <td>BugScribe provides deeper diagnostic report generation beyond pinned comments.</td>
+                            </tr>
+                            <tr>
+                                <th>Bugasura</th>
+                                <td>QA / bug tracking</td>
+                                <td>Partial</td>
+                                <td>Partial</td>
+                                <td>Limited</td>
+                                <td>Limited</td>
+                                <td>Partial</td>
+                                <td>Partial</td>
+                                <td>BugScribe is narrower and lower-effort for automated report creation.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 BugScribe Team - Bilkent University Computer Engineering Department</p>
+            <p>CS-491 Senior Design Project</p>
+        </div>
+    </footer>
+    <script>
+        const navToggle = document.querySelector('.nav-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+
+        if (navToggle && navMenu) {
+            navToggle.addEventListener('click', () => {
+                const isOpen = navMenu.classList.toggle('is-open');
+                navToggle.setAttribute('aria-expanded', String(isOpen));
+                navToggle.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
+                const toggleText = navToggle.querySelector('.nav-toggle-text');
+                if (toggleText) {
+                    toggleText.textContent = isOpen ? 'Close navigation menu' : 'Open navigation menu';
+                }
+            });
+
+            navMenu.querySelectorAll('a').forEach((link) => {
+                link.addEventListener('click', () => {
+                    navMenu.classList.remove('is-open');
+                    navToggle.setAttribute('aria-expanded', 'false');
+                    navToggle.setAttribute('aria-label', 'Open navigation menu');
+                    const toggleText = navToggle.querySelector('.nav-toggle-text');
+                    if (toggleText) {
+                        toggleText.textContent = 'Open navigation menu';
+                    }
+                });
+            });
+        }
+    </script>
+</body>
+</html>
